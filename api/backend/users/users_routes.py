@@ -39,7 +39,7 @@ def get_users():
 def create_user():
     current_app.logger.info('POST /users route')
     user_info = request.json
-    
+
     # Extract user info from request
     username = user_info['userName']
     email = user_info['email'] 
@@ -71,6 +71,7 @@ def create_user():
 # Update user profile
 @users.route('/users', methods=['PUT'])
 def update_user():
+    raise RuntimeError("probably better to use the user-specific route here. If not for whatever reason, go ahead and delete this error.")
     current_app.logger.info('PUT /users route')
     user_info = request.json
     user_id = user_info['userID']
