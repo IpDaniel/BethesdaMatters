@@ -43,7 +43,7 @@ def create_peerstory():
 
 #------------------------------------------------------------
 # Update peer story info for specific peerStoryID
-#
+# TODO: Need to test
 @peerstories.route('/peerstories', methods=['PUT'])
 def update_peerstory():
     current_app.logger.info('PUT /peerstories route')
@@ -110,5 +110,3 @@ def update_specific_peerstory(peerStoryID):
     cursor.execute(query, data)
     db.get_db().commit()
     return 'peer story updated!'
-
-
