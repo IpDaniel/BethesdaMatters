@@ -28,8 +28,8 @@ CREATE TABLE Question (
     companyID INT,
     questionType VARCHAR(50) NOT NULL,
     userID INT,
-    FOREIGN KEY (companyID) REFERENCES Company(companyID),
-    FOREIGN KEY (userID) REFERENCES User(userID)
+    FOREIGN KEY (companyID) REFERENCES Company(companyID) ON DELETE CASCADE,
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE
 );
 
 -- InterviewPrep Table (Strong Entity)
@@ -37,8 +37,8 @@ CREATE TABLE InterviewPrep (
     interviewPrepID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT,
     questionID INT,
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (questionID) REFERENCES Question(questionID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE,
+    FOREIGN KEY (questionID) REFERENCES Question(questionID) ON DELETE CASCADE
 );
 
 -- PeerStory Table (Strong Entity)
@@ -47,8 +47,8 @@ CREATE TABLE PeerStory (
     review TEXT,
     userID INT,
     companyID INT,
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (companyID) REFERENCES Company(companyID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE,
+    FOREIGN KEY (companyID) REFERENCES Company(companyID) ON DELETE CASCADE
 );
 
 -- Relationship Tables (Bridge Tables)
@@ -58,8 +58,8 @@ CREATE TABLE User_question (
     userID INT,
     questionID INT,
     PRIMARY KEY (userID, questionID),
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (questionID) REFERENCES Question(questionID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE,
+    FOREIGN KEY (questionID) REFERENCES Question(questionID) ON DELETE CASCADE
 );
 
 -- Stu_Iprep (Relationship: request)
@@ -68,8 +68,8 @@ CREATE TABLE Stu_Iprep (
     interviewPrepID INT,
     date DATE,
     PRIMARY KEY (userID, interviewPrepID),
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE, 
+    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID) ON DELETE CASCADE
 );
 
 -- Ta_Iprep (Relationship: manages)
@@ -77,8 +77,8 @@ CREATE TABLE Ta_Iprep (
     userID INT,
     interviewPrepID INT,
     PRIMARY KEY (userID, interviewPrepID),
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE,
+    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID) ON DELETE CASCADE
 );
 
 -- Iprep_question (Relationship: contains)
@@ -95,8 +95,8 @@ CREATE TABLE User_story (
     userID INT,
     peerStoryID INT,
     PRIMARY KEY (userID, peerStoryID),
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (peerStoryID) REFERENCES PeerStory(peerStoryID)
+    FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE, 
+    FOREIGN KEY (peerStoryID) REFERENCES PeerStory(peerStoryID) ON DELETE CASCADE
 );
 
 -- Question_comp (Relationship: is about)
@@ -104,8 +104,8 @@ CREATE TABLE Question_comp (
     questionID INT,
     companyID INT,
     PRIMARY KEY (questionID, companyID),
-    FOREIGN KEY (questionID) REFERENCES Question(questionID),
-    FOREIGN KEY (companyID) REFERENCES Company(companyID)
+    FOREIGN KEY (questionID) REFERENCES Question(questionID) ON DELETE CASCADE,
+    FOREIGN KEY (companyID) REFERENCES Company(companyID) ON DELETE CASCADE
 );
 
 -- Story_comp (Relationship: is about)
@@ -113,8 +113,8 @@ CREATE TABLE Story_comp (
     peerStoryID INT,
     companyID INT,
     PRIMARY KEY (peerStoryID, companyID),
-    FOREIGN KEY (peerStoryID) REFERENCES PeerStory(peerStoryID),
-    FOREIGN KEY (companyID) REFERENCES Company(companyID)
+    FOREIGN KEY (peerStoryID) REFERENCES PeerStory(peerStoryID) ON DELETE CASCADE,
+    FOREIGN KEY (companyID) REFERENCES Company(companyID) ON DELETE CASCADE
 );
 
 -- User
