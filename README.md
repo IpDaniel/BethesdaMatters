@@ -1,78 +1,127 @@
-# Fall 2024 CS 3200 Project Template Repository
+# Welcome to NUReady
 
-This repo is a template for your semester project.  It includes most of the infrastructure setup (containers) and sample code and data throughout.  Explore it fully and ask questions.
+NUReady is a Flask-based web application designed to assist users of Northeastern University in preparing for interviews. It provides functionality for managing interview questions, peer stories, analytics, and user profiles, along with administrative controls for companies and interview preparation sessions. The app is modular, scalable, and uses a MySQL database for persistence.
 
-## Prerequisites
+## Table of Contents
 
-- A GitHub Account
-- A terminal-based or GUI git client
-- VSCode with the Python Plugin
-- A distrobution of Python running on your laptop (Choco (for Windows), brew (for Macs), miniconda, Anaconda, etc). 
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup and Installation](#setup-and-installation)
+- [Project Structure](#project-structure)
+- [Endpoints](#endpoints)
+- [Environment Variables](#environment-variables)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Current Project Components
+---
 
-Currently, there are three major components which will each run in their own Docker Containers:
+## Features
 
-- Streamlit App in the `./app` directory
-- Flask REST api in the `./api` directory
-- SQL files for your data model and data base in the `./database-files` directory
+### Core Functionalities:
+- **Users**: Register, update, and manage user profiles.
+- **Questions**: Add, update, and retrieve interview questions with filters for companies, roles, and question types.
+- **Companies**: Manage company information, including creating, updating, and deleting records.
+- **Peer Stories**: Add and manage user-submitted interview experiences with peer reviews.
+- **Interview Preparation**: Track and manage interview preparation sessions, linking students and teaching assistants.
+- **Analytics**: Get insights into popular companies, user distributions, and interview preparation trends.
 
-## Suggestion for Learning the Project Code Base
+### Additional Features:
+- RESTful API structure with blueprints for modular code organization.
+- Error handling for better debugging and user feedback.
+- Logging for request tracking and debugging.
+- MySQL database for persistence.
+- Secure configuration using environment variables.
 
-If you are not familiar with web app development, this code base might be confusing. You will probably want two versions though:
-1. One version for you to explore, try things, break things, etc. We'll call this your **Personal Repo** 
-1. One version of the repo that your team will share.  We'll call this the **Team Repo**. 
+---
 
+## Technologies Used
 
-### Setting Up Your Personal Repo
+- **Backend**: Flask (Python)
+- **Database**: MySQL
+- **ORM**: Flask-MySQL
+- **Deployment**: Docker (planned), Flask built-in server for development
+- **Additional Tools**:
+  - `dotenv` for environment variable management
+  - `pymysql` for database interactions
+  - REST API design principles
 
-1. In GitHub, click the **fork** button in the upper right corner of the repo screen. 
-1. When prompted, give the new repo a unique name, perhaps including your last name and the word 'personal'. 
-1. Once the fork has been created, clone YOUR forked version of the repo to your computer. 
-1. Set up the `.env` file in the `api` folder based on the `.env.template` file.
-1. Start the docker containers. 
+---
 
-### Setting Up Your Team Repo 
+## Setup and Installation
 
-Before you start: As a team, one person needs to assume the role of *Team Project Repo Owner*. 
+### Prerequisites
+- Python 3.8 or higher
+- MySQL Server
+- Virtual Environment (optional but recommended)
+- Docker (optional for containerized deployment)
 
-1. The Team Project Repo Owner needs to fork this template repo into their own GitHub account **and give the repo a name consistent with your project's name**.  If you're worried that the repo is public, don't.  Every team is doing a different project. 
-1. In the newly forked team repo, the Team Project Repo Owner should go to the **Settings** tab, choose **Collaborators and Teams** on the left-side panel. Add each of your team members to the repository with Write access. 
-1. Each of the other team members will receive an invitation to join.  Obviously accept the invite. 
-1. Once that process is complete, each team member, including the repo owner, should clone the Team's Repo to their local machines (in a different location than your Personal Project Repo).  
+### Steps
+1. **Clone the Repository**:
+    ```bash
+    git clone <repository-url>
+    cd interview-prep-system
+    ```
 
-## Controlling the Containers
+2. **Set up the Environment**:
+    - Create a virtual environment:
+      ```bash
+      python3 -m venv venv
+      source venv/bin/activate  # On Windows: venv\Scripts\activate
+      ```
+    - Install dependencies:
+      ```bash
+      pip install -r requirements.txt
+      ```
 
-- `docker compose up -d` to start all the containers in the background
-- `docker compose down` to shutdown and delete the containers
-- `docker compose up db -d` only start the database container (replace db with the other services as needed)
-- `docker compose stop` to "turn off" the containers but not delete them. 
+3. **Database Setup**:
+    - Create a MySQL database:
+      ```sql
+      CREATE DATABASE interview_prep_system;
+      ```
+    - Populate the `.env` file with database credentials:
+      ```
+      DB_USER=<your-db-username>
+      MYSQL_ROOT_PASSWORD=<your-db-password>
+      DB_HOST=127.0.0.1
+      DB_PORT=3306
+      DB_NAME=interview_prep_system
+      SECRET_KEY=<your-secret-key>
+      ```
 
+4. **Run the Application**:
+    ```bash
+    export FLASK_APP=run.py
+    flask run
+    ```
+    The app will run at `http://127.0.0.1:5000`.
 
-## Handling User Role Access and Control
+5. **Test the Endpoints**:
+    Use tools like Postman, cURL, or Swagger (if configured) to interact with the API.
 
-In most applications, when a user logs in, they assume a particular role.  For instance, when one logs in to a stock price prediction app, they may be a single investor, a portfolio manager, or a corporate executive (of a publicly traded company).  Each of those *roles* will likely present some similar features as well as some different features when compared to the other roles. So, how do you accomplish this in Streamlit?  This is sometimes called Role-based Access Control, or **RBAC** for short. 
+---
 
-The code in this project demonstrates how to implement a simple RBAC system in Streamlit but without actually using user authentication (usernames and passwords).  The Streamlit pages from the original template repo are split up among 3 roles - Political Strategist, USAID Worker, and a System Administrator role (this is used for any sort of system tasks such as re-training ML model, etc.). It also demonstrates how to deploy an ML model. 
+## Project Structure
 
-Wrapping your head around this will take a little time and exploration of this code base.  Some highlights are below. 
-
-### Getting Started with the RBAC 
-1. We need to turn off the standard panel of links on the left side of the Streamlit app. This is done through the `app/src/.streamlit/config.toml` file.  So check that out. We are turning it off so we can control directly what links are shown. 
-1. Then I created a new python module in `app/src/modules/nav.py`.  When you look at the file, you will se that there are functions for basically each page of the application. The `st.sidebar.page_link(...)` adds a single link to the sidebar. We have a separate function for each page so that we can organize the links/pages by role. 
-1. Next, check out the `app/src/Home.py` file. Notice that there are 3 buttons added to the page and when one is clicked, it redirects via `st.switch_page(...)` to that Roles Home page in `app/src/pages`.  But before the redirect, I set a few different variables in the Streamlit `session_state` object to track role, first name of the user, and that the user is now authenticated.  
-1. Notice near the top of `app/src/Home.py` and all other pages, there is a call to `SideBarLinks(...)` from the `app/src/nav.py` module.  This is the function that will use the role set in `session_state` to determine what links to show the user in the sidebar. 
-1. The pages are organized by Role.  Pages that start with a `0` are related to the *Political Strategist* role.  Pages that start with a `1` are related to the *USAID worker* role.  And, pages that start with a `2` are related to The *System Administrator* role. 
-
-
-## Deploying An ML Model (Totally Optional for CS3200 Project)
-
-*Note*: This project only contains the infrastructure for a hypothetical ML model. 
-
-1. Build, train, and test your ML model in a Jupyter Notebook. 
-1. Once you're happy with the model's performance, convert your Jupyter Notebook code for the ML model to a pure python script.  You can include the `training` and `testing` functionality as well as the `prediction` functionality.  You may or may not need to include data cleaning, though. 
-1. Check out the  `api/backend/ml_models` module.  In this folder, I've put a sample (read *fake*) ML model in `model01.py`.  The `predict` function will be called by the Flask REST API to perform '*real-time*' prediction based on model parameter values that are stored in the database.  **Important**: you would never want to hard code the model parameter weights directly in the prediction function.  tl;dr - take some time to look over the code in `model01.py`.  
-1. The prediction route for the REST API is in `api/backend/customers/customer_routes.py`. Basically, it accepts two URL parameters and passes them to the `prediction` function in the `ml_models` module. The `prediction` route/function packages up the value(s) it receives from the model's `predict` function and send its back to Streamlit as JSON. 
-1. Back in streamlit, check out `app/src/pages/11_Prediction.py`.  Here, I create two numeric input fields.  When the button is pressed, it makes a request to the REST API URL `/c/prediction/.../...` function and passes the values from the two inputs as URL parameters.  It gets back the results from the route and displays them. Nothing fancy here. 
-
- 
+```plaintext
+.
+├── backend/
+│   ├── __init__.py
+│   ├── db_connection.py      # Database connection setup
+│   ├── customers/            # Blueprint for customer routes
+│   │   └── customer_routes.py
+│   ├── questions/            # Blueprint for question routes
+│   │   └── questions_routes.py
+│   ├── analytics/            # Blueprint for analytics routes
+│   │   └── analytics_routes.py
+│   ├── users/                # Blueprint for user routes
+│   │   └── users_routes.py
+│   ├── companies/            # Blueprint for company routes
+│   │   └── companies_routes.py
+│   ├── peerstories/          # Blueprint for peer story routes
+│   │   └── peerstories_routes.py
+│   └── interviewprep/        # Blueprint for interview prep routes
+│       └── interviewprep_routes.py
+├── run.py                    # Main entry point of the application
+├── .env                      # Environment variables
+├── requirements.txt          # Python dependencies
+└── README.md                 # Project documentation
