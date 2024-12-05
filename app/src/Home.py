@@ -52,6 +52,8 @@ if st.button("Act as John Smith, a Northeastern Student",
     # we add the first name of the user (so it can be displayed on 
     # subsequent pages). 
     st.session_state['first_name'] = 'John'
+    # also save the id of the user in the session state 
+    st.session_state['id'] = '1'
     # finally, we ask streamlit to switch to another page, in this case, the 
     # landing page for this particular user type
     logger.info("Logging in as Student")
