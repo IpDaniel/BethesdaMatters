@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Finding interview prep session")
+st.write("# Find Interview Prep Session")
 st.write ("")
 st.write("Enter the prep session ID to view details")\
 

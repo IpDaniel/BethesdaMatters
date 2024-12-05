@@ -7,11 +7,11 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Explore All Companies")
+st.write("# View all Peer Stories")
 
-companies = requests.get('http://api:4000/co/companies').json()
+questions = requests.get('http://api:4000/p/peerstories').json()
 
 try:
-  st.dataframe(companies) 
+  st.dataframe(questions) 
 except:
   st.write("Could not connect connect to api.")

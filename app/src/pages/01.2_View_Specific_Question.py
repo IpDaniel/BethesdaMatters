@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Finding question in the Question Bank")
+st.write("# Finding A Question In The Question Bank")
 st.write ("")
 st.write("Enter the question ID to view the question details")\
 

@@ -19,12 +19,30 @@ def StudentHomeNav():
         "pages/00_Student_Home.py", label="Student Home", icon="👤"
     )
 
+def StudentQuestionBank():
+    st.sidebar.page_link(
+        "pages/01_Question_Bank.py", label="Question Bank", icon="🏦"
+    )
 
-# def WorldBankVizNav():
-#     st.sidebar.page_link(
-#         "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
-#     )
+def StudentInterviewPrep():
+    st.sidebar.page_link(
+        "pages/02_Interview_Prep.py", label="Interview Prep", icon="🎤"
+    )
 
+def StudentPeerStories():
+    st.sidebar.page_link(
+        "pages/03_Peer_Stories.py", label="Peer Stories", icon="📖"
+    )
+
+def StudentCompanies():
+    st.sidebar.page_link(
+        "pages/04_Companies.py", label="Companies", icon="🏢"
+    )
+
+def StudentAnalytics():
+    st.sidebar.page_link(
+        "pages/05_Analytics.py", label="Analytics", icon="📈"
+    )
 
 # def MapDemoNav():
 #     st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
@@ -122,6 +140,11 @@ def SideBarLinks(show_home=False):
         # If the user role is a student, redirect to the student home page
         if st.session_state["role"] == "student":
             StudentHomeNav()
+            StudentQuestionBank()
+            StudentInterviewPrep()
+            StudentPeerStories()
+            StudentCompanies()
+            StudentAnalytics()
       
         # If the user role is a alumni, redirect to the alumni home page
         if st.session_state["role"] == "alumni":

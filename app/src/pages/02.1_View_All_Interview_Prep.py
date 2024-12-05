@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Accessing all interview Preps")
+st.write("# View all Interview Preps")
 
 questions = requests.get('http://api:4000/i/interviewprep').json()
 

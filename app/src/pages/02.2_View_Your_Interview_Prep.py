@@ -7,7 +7,8 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Accessing Your Prep Schedule from Within Streamlit")
+st.write("# Your Interview Prep Schedule") 
+st.write("")
 
 id = st.session_state['id']
 url = f'http://api:4000/i/interviewprep/student/{id}'

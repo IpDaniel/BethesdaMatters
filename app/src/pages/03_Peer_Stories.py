@@ -7,11 +7,22 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Accessing Peer Stories from Within Streamlit")
+st.title("Peer Stories: Experiences of job searching")
+st.write('')
+st.write('')
+st.write('### To view stories, to tell a story, or to edit a story?')
 
-questions = requests.get('http://api:4000/p/peerstories').json()
+if st.button('View Stories',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/03.1_View_All_Peer_Stories.py')
 
-try:
-  st.dataframe(questions) 
-except:
-  st.write("Could not connect connect to api.")
+if st.button('Tell a Story',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/03.2_Tell_Story.py')
+
+if st.button('Edit a Story',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/03.3_Edit_A_Story.py') #TODO

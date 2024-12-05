@@ -7,11 +7,8 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Explore All Companies")
+st.write("# Edit A Story")
 
-companies = requests.get('http://api:4000/co/companies').json()
+st.write("## Edit a story with id:")
 
-try:
-  st.dataframe(companies) 
-except:
-  st.write("Could not connect connect to api.")
+userID = st.session_state['id']

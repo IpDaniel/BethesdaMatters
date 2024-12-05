@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Looking at all questions in the Question Bank")
+st.write("# View All Questions In The Question Bank")
 
 questions = requests.get('http://api:4000/q/questions').json()
 

@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Cancel interview prep session")
+st.write("# Cancel Interview Prep Session")
 st.write ("")
 st.write("Type in the interview prep session ID to cancel that session")\
 
