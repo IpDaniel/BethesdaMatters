@@ -18,6 +18,11 @@ if st.button('View Stories',
               use_container_width=True):
   st.switch_page('pages/03.1_View_All_Peer_Stories.py')
 
+if st.button('Find Stories',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/03.4_View_A_Peer_Stories.py')
+
 if st.button('Tell a Story',
               type='primary',
               use_container_width=True):

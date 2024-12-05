@@ -16,7 +16,7 @@ st.write('### How can we help you today?')
 if st.button('View Your Interview Preps',
               type='primary',
               use_container_width=True):
-  st.switch_page('pages/02.2_View_Your_Interview_Prep.py')
+  st.switch_page('pages/32.1_View_Your_Interview_Prep.py')
 
 if st.button('View Interview Prep by ID',
               type='primary',

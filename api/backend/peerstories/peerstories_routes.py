@@ -95,18 +95,53 @@ def get_peerstory(peerStoryID):
 #------------------------------------------------------------
 # Update peer story info for specific peerStoryID
 # TODO: Need to test
-@peerstories.route('/peerstories/<peerStoryID>', methods=['PUT'])
+@peerstories.route('/peerstories/<int:peerStoryID>', methods=['PUT'])
 def update_specific_peerstory(peerStoryID):
-    current_app.logger.info('PUT /peerstories/<peerStoryID> route')
+    current_app.logger.info(f'PUT /peerstories/{peerStoryID} route')
     peerstory_info = request.json
-    review = peerstory_info['review']
-    userID = peerstory_info['userID']
-    companyID = peerstory_info['companyID']
-    
+
+    review = peerstory_info.get('review')
+    userID = peerstory_info.get('userID')
+    companyID = peerstory_info.get('companyID')
+
+    if review is None or userID is None or companyID is None:
+        response = make_response(jsonify({"error": "Missing required fields: review, userID, and companyID"}))
+        response.status_code = 400
+        return response
+
     cursor = db.get_db().cursor()
 
-    query = 'UPDATE PeerStory SET review = %s, userID = %s, companyID = %s WHERE peerStoryID = %s'
-    data = (review, userID, companyID, peerStoryID)
-    cursor.execute(query, data)
-    db.get_db().commit()
-    return 'peer story updated!'
+    try:
+        cursor.execute('SELECT peerStoryID FROM PeerStory WHERE peerStoryID = %s', (peerStoryID,))
+        if cursor.fetchone() is None:
+            response = make_response(jsonify({"error": "PeerStory not found"}))
+            response.status_code = 404
+            return response
+
+        cursor.execute('SELECT userID FROM User WHERE userID = %s', (userID,))
+        if cursor.fetchone() is None:
+            response = make_response(jsonify({"error": "UserID does not exist"}))
+            response.status_code = 400
+            return response
+
+        cursor.execute('SELECT companyID FROM Company WHERE companyID = %s', (companyID,))
+        if cursor.fetchone() is None:
+            response = make_response(jsonify({"error": "CompanyID does not exist"}))
+            response.status_code = 400
+            return response
+
+        query = 'UPDATE PeerStory SET review = %s, userID = %s, companyID = %s WHERE peerStoryID = %s'
+        data = (review, userID, companyID, peerStoryID)
+        cursor.execute(query, data)
+        db.get_db().commit()
+
+        response = make_response(jsonify({"message": "PeerStory updated successfully"}))
+        response.status_code = 200
+        return response
+
+    except Exception as e:
+        db.get_db().rollback()
+        current_app.logger.error(f"Error updating PeerStory: {str(e)}")
+        response = make_response(jsonify({"error": "An error occurred while updating the PeerStory."}))
+        response.status_code = 500
+        return response

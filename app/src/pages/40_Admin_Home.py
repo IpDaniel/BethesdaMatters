@@ -14,6 +14,11 @@ st.write('')
 st.write('')
 st.write('### What would you like to do?')
 
+if st.button('Edit Users',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/45_User.py')
+
 if st.button('Edit Question Bank',
               type='primary',
               use_container_width=True):

@@ -7,20 +7,20 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Delete Question")
+st.write("# Delete User")
 st.write ("")
-st.write("Type in the question ID to delete")
+st.write("Type in the User ID to delete that company")\
 
-with st.form("QuestionID"):
-  question_id = st.text_input("Question ID")
-  submitted = st.form_submit_button("Delete This Question Prep")
+with st.form("UserID"):
+  user_id = st.text_input("User ID")
+  submitted = st.form_submit_button("Delete This User")
   if submitted:
-    url = f'http://api:4000/q/questions/{question_id}'
+    url = f'http://api:4000/co/companies/{user_id}'
     
     try:
       response = requests.delete(url)
       response.raise_for_status()
-      st.write("Question deleted successfully")
+      st.write("User deleted successfully")
     except:
       st.write("Could not connect connect to api.")
 

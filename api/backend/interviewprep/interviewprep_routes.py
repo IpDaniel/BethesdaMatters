@@ -196,18 +196,14 @@ def update_specific_interviewprep(interviewPrepID):
     meetingDate = interviewprep_info['meetingDate']
 
     cursor = db.get_db().cursor()
-    
-    # Update InterviewPrep table
     query = 'UPDATE InterviewPrep SET questionID = %s WHERE interviewPrepID = %s'
     data = (questionID, interviewPrepID)
     cursor.execute(query, data)
 
-    # Update Stu_Iprep table
     query = 'UPDATE Stu_Iprep SET userID = %s, date = %s WHERE interviewPrepID = %s'
     data = (studentID, meetingDate, interviewPrepID)
     cursor.execute(query, data)
 
-    # Update Ta_Iprep table
     query = 'UPDATE Ta_Iprep SET userID = %s WHERE interviewPrepID = %s'
     data = (taID, interviewPrepID)
     cursor.execute(query, data)

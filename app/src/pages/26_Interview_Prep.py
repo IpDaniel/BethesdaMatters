@@ -10,18 +10,27 @@ SideBarLinks()
 st.title(f"How would you like to access Interview Prep?")
 st.write('')
 st.write('')
-st.write('### How can we help you today?')
+st.write('### How can we help you prep for interviews?')
 
-# Makes more sense to view your own interview preps
-if st.button('View Your Interview Preps',
+if st.button('View All Interview Preps',
               type='primary',
               use_container_width=True):
-  st.switch_page('pages/02.2_View_Your_Interview_Prep.py')
+  st.switch_page('pages/02.1_View_All_Interview_Prep.py')
 
 if st.button('View Interview Prep by ID',
               type='primary',
               use_container_width=True):
   st.switch_page('pages/02.3_View_Specific_Interview_Prep.py')
+
+if st.button('Add Interview Prep',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/26.1_Add_Interview_Prep.py')
+
+if st.button('Edit Interview Prep',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/26.2_Edit_Interview_Prep.py')
 
 if st.button('Cancel Interview Prep',
               type='primary',

@@ -48,7 +48,7 @@ if st.button("Act as John Smith, a Northeastern Student",
     # when user clicks the button, they are now considered authenticated
     st.session_state['authenticated'] = True
     # we set the role of the current user
-    st.session_state['role'] = 'student'
+    st.session_state['role'] = 'Student'
     # we add the first name of the user (so it can be displayed on 
     # subsequent pages). 
     st.session_state['first_name'] = 'John'
@@ -63,7 +63,7 @@ if st.button('Act as Bob Vu, a Northeastern Alumni',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'alumni'
+    st.session_state['role'] = 'Alumni'
     st.session_state['first_name'] = 'Bob'
     logger.info("Logging in as Alumni")
     st.session_state['id'] = '10'
@@ -73,7 +73,7 @@ if st.button('Act as Sarah Mitchell, a Northeastern Career Advisor',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'advisor'
+    st.session_state['role'] = 'Advisor'
     st.session_state['first_name'] = 'Sarah'
     logger.info("Logging in as Advisor")
     st.switch_page('pages/20_Advisor_Home.py')
@@ -82,7 +82,7 @@ if st.button('Act as Arhat Shah, a Teaching Assistant',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'teachingassistant'
+    st.session_state['role'] = 'TA'
     st.session_state['first_name'] = 'Arhat'
     st.session_state['id'] = '3'
     st.switch_page('pages/30_Teaching_Assistant_Home.py')
@@ -93,6 +93,15 @@ if st.button('Act as System Administrator',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'administrator'
     st.session_state['first_name'] = 'SysAdmin'
+    st.session_state['id'] = '100'
     st.switch_page('pages/40_Admin_Home.py')
 
+if st.button('Sign up for an account', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['first_name'] = 'Guest'
+    st.session_state['id'] = '0'
+    st.session_state['role'] = 'guest'
+    st.switch_page('pages/Sign_Up.py')
 

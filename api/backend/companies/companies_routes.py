@@ -45,21 +45,51 @@ def create_company():
 #------------------------------------------------------------
 # Update company info for specific companyID
 # TODO: Need to test
-@companies.route('/companies', methods=['PUT'])
-def update_company():
-    current_app.logger.info('PUT /companies route')
+@companies.route('/companies/<int:company_id>', methods=['PUT'])
+def update_company(company_id):
+    current_app.logger.info(f'PUT /companies/{company_id} route')
     company_info = request.json
-    companyID = company_info['companyID']
-    companyName = company_info['companyName']
-    location = company_info['location']
+    
+    update_fields = []
+    update_values = []
+    
+    if 'companyName' in company_info:
+        update_fields.append('companyName = %s')
+        update_values.append(company_info['companyName'])
+        
+    if 'location' in company_info:
+        update_fields.append('location = %s')
+        update_values.append(company_info['location'])
+    
+    if not update_fields:
+        response = make_response(jsonify({"error": "No fields to update"}))
+        response.status_code = 400
+        return response
+    
+    query = 'UPDATE Company SET ' + ', '.join(update_fields) + ' WHERE companyID = %s'
+    update_values.append(company_id)
     
     cursor = db.get_db().cursor()
+    try:
+        cursor.execute('SELECT companyID FROM Company WHERE companyID = %s', (company_id,))
+        if cursor.fetchone() is None:
+            response = make_response(jsonify({"error": "Company not found"}))
+            response.status_code = 404
+            return response
 
-    query = 'UPDATE Company SET companyName = %s, location = %s WHERE companyID = %s'
-    data = (companyName, location, companyID)
-    cursor.execute(query, data)
-    db.get_db().commit()
-    return 'company updated!'
+        cursor.execute(query, tuple(update_values))
+        db.get_db().commit()
+        
+        response = make_response(jsonify({"message": "Company updated successfully"}))
+        response.status_code = 200
+        return response
+        
+    except Exception as e:
+        db.get_db().rollback()
+        response = make_response(jsonify({"error": str(e)}))
+        response.status_code = 400
+        return response
+
 
 #------------------------------------------------------------
 # Delete company for specific companyID

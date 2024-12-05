@@ -8,9 +8,8 @@ import streamlit as st
 def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
-
-# def AboutPageNav():
-#     st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
+def EditProfileNav():
+    st.sidebar.page_link("pages/Edit_Profile.py", label="Edit Profile", icon="✏️")
 
 
 #### ------------------------ Role of student ------------------------
@@ -44,10 +43,6 @@ def StudentAnalytics():
         "pages/05_Analytics.py", label="Analytics", icon="📈"
     )
 
-# def MapDemoNav():
-#     st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
-
-
 #### ------------------------ Role of Alumni ------------------------
 def AlumniHomeNav():
     st.sidebar.page_link(
@@ -80,17 +75,35 @@ def AdvisorHomeNav():
         "pages/20_Advisor_Home.py", label="Advisor Home", icon="👤"
     )
 
+def AdvisorUserNav():
+    st.sidebar.page_link(
+        "pages/25_User.py", label="Users", icon="🌺"
+    )
 
-# def PredictionNav():
-#     st.sidebar.page_link(
-#         "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
-#     )
+def AdvisorQuestionBank():
+    st.sidebar.page_link(
+        "pages/21_Question_Bank.py", label="Question Bank", icon="🏦"
+    )
 
+def AdvisorInterviewPrep():
+    st.sidebar.page_link(
+        "pages/26_Interview_Prep.py", label="Interview Prep", icon="🎤"
+    )
 
-# def ClassificationNav():
-#     st.sidebar.page_link(
-#         "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-#     )
+def AdvisorPeerStories():
+    st.sidebar.page_link(
+        "pages/22_Peer_Stories.py", label="Peer Stories", icon="📖"
+    )
+
+def AdvisorCompanies():
+    st.sidebar.page_link(
+        "pages/23_Companies.py", label="Companies", icon="🏢"
+    )
+
+def AdvisorAnalytics():
+    st.sidebar.page_link(
+        "pages/24_Analytics.py", label="Analytics", icon="📈"
+    )
 
 #### ------------------------ Role of Teaching Assistant ------------------------
 def TAHomeNav():
@@ -98,25 +111,37 @@ def TAHomeNav():
         "pages/30_Teaching_Assistant_Home.py", label="TA Home", icon="👤"
     )
 
+def TAUserNav():
+    st.sidebar.page_link(
+        "pages/25_User.py", label="Users", icon="🌺"
+    )
 
-# def PredictionNav():
-#     st.sidebar.page_link(
-#         "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
-#     )
+def TAQuestionBank():
+    st.sidebar.page_link(
+        "pages/21_Question_Bank.py", label="Question Bank", icon="🏦"
+    )
 
+def TAInterviewPrep():
+    st.sidebar.page_link(
+        "pages/32_Interview_Prep.py", label="Interview Prep", icon="🎤"
+    )
 
-# def ClassificationNav():
-#     st.sidebar.page_link(
-#         "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-#     )
+def TAPeerStories():
+    st.sidebar.page_link(
+        "pages/22_Peer_Stories.py", label="Peer Stories", icon="📖"
+    )
+
+def TACompanies():
+    st.sidebar.page_link(
+        "pages/04_Companies.py", label="Companies", icon="🏢"
+    )
+
+def TAAnalytics():
+    st.sidebar.page_link(
+        "pages/24_Analytics.py", label="Analytics", icon="📈"
+    )
 
 # #### ------------------------ System Admin Role ------------------------
-# If user role is ADMIN how users, questions, peer stories, and companies.
-# def AdminPageNav():
-#     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
-#     st.sidebar.page_link(
-#         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
-#     )
 
 def AdminNav():
     st.sidebar.page_link(
@@ -143,6 +168,11 @@ def AdminCompaniesNav():
         "pages/44_Companies.py", label="Companies", icon="🏢"
     )
 
+def AdminUserNav():
+    st.sidebar.page_link(
+        "pages/45_User.py", label="Users", icon="🌺"
+    )
+
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
     """
@@ -151,7 +181,6 @@ def SideBarLinks(show_home=False):
 
     # add a logo to the sidebar always
     st.sidebar.image("assets/logo.png", width=150)
-
     # If there is no logged in user, redirect to the Home (Landing) page
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
@@ -165,33 +194,50 @@ def SideBarLinks(show_home=False):
     if st.session_state["authenticated"]:
 
         # If the user role is a student, redirect to the student home page
-        if st.session_state["role"] == "student":
+        if st.session_state["role"] == "Student":
             StudentHomeNav()
             StudentQuestionBank()
             StudentInterviewPrep()
             StudentPeerStories()
             StudentCompanies()
             StudentAnalytics()
+            EditProfileNav()
       
         # If the user role is a alumni, redirect to the alumni home page
-        if st.session_state["role"] == "alumni":
+        if st.session_state["role"] == "Alumni":
             AlumniHomeNav()
             AlumniQuestionBankNav()
             AlumniPeerStoriesNav()
             AlumniCompaniesNav()
             AlumniAnalyticsNav()
+            EditProfileNav()
 
         # If the user role is a advisor, redirect to the advisor home pag
-        if st.session_state["role"] == "advisor":
+        if st.session_state["role"] == "Advisor":
             AdvisorHomeNav()
+            AdvisorUserNav()
+            AdvisorQuestionBank()
+            AdvisorInterviewPrep()
+            AdvisorPeerStories()
+            AdvisorCompanies()
+            AdvisorAnalytics()
+            EditProfileNav()
 
         # If the user role is TA, redirect to the TA home page
-        if st.session_state["role"] == "teachingassitant":
+        if st.session_state["role"] == "TA":
             TAHomeNav()
+            TAUserNav()
+            TAQuestionBank()
+            TAInterviewPrep()
+            TAPeerStories()
+            TACompanies()
+            TAAnalytics()
+            EditProfileNav()
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":
             AdminNav()
+            AdminUserNav()
             AdminQuestionBankNav()
             AdminInterviewPrepNav()
             AdminPeerStoriesNav()
@@ -204,5 +250,7 @@ def SideBarLinks(show_home=False):
         # Always show a logout button if there is a logged in user
         if st.sidebar.button("Logout"):
             del st.session_state["role"]
+            del st.session_state["id"]
+            del st.session_state["first_name"]
             del st.session_state["authenticated"]
             st.switch_page("Home.py")

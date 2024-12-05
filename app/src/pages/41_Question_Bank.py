@@ -28,7 +28,12 @@ if st.button('Find Specific Question',
 if st.button ('Add New Question',
               type='primary',
               use_container_width=True):
-  st.switch_page('pages/11.1_Add_New_Question.py')
+  st.switch_page('pages/11.1_Add_A_Question.py')
+
+if st.button ('Edit Question',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/41.2_Edit_Question.py')
 
 if st.button ('Delete Question',
               type='primary',

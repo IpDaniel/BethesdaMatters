@@ -68,13 +68,11 @@ def create_user():
         return response
 
 #------------------------------------------------------------
-# Update user profile
-@users.route('/users', methods=['PUT'])
-def update_user():
-    raise RuntimeError("probably better to use the user-specific route here. If not for whatever reason, go ahead and delete this error.")
-    current_app.logger.info('PUT /users route')
+# Update user profile FIX
+@users.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    current_app.logger.info(f'PUT /users/{user_id} route')
     user_info = request.json
-    user_id = user_info['userID']
     
     # Build update query dynamically based on provided fields
     update_fields = []
@@ -103,6 +101,13 @@ def update_user():
     
     cursor = db.get_db().cursor()
     try:
+        # Check if the user exists
+        cursor.execute('SELECT userID FROM User WHERE userID = %s', (user_id,))
+        if cursor.fetchone() is None:
+            response = make_response(jsonify({"error": "User not found"}))
+            response.status_code = 404
+            return response
+
         cursor.execute(query, tuple(update_values))
         db.get_db().commit()
         
@@ -115,6 +120,7 @@ def update_user():
         response = make_response(jsonify({"error": str(e)}))
         response.status_code = 400
         return response
+
 
 #------------------------------------------------------------
 # Delete user profile (Admin only)

@@ -118,16 +118,16 @@ CREATE TABLE Story_comp (
 );
 
 -- User
-insert into User (userID, userName, email, userType) values (1, 'Bari Peevor', 'bpeevor0@csmonitor.com', 'TA');
-insert into User (userID, userName, email, userType) values (2, 'Brewer Milnes', 'bmilnes1@bluehost.com', 'Advisor');
+insert into User (userID, userName, email, userType) values (1, 'John Smith', 'jsmith@csmonitor.com', 'Student');
+insert into User (userID, userName, email, userType) values (2, 'Sarah Mitchell', 'smitchell@bluehost.com', 'Advisor');
 insert into User (userID, userName, email, userType) values (3, 'Dredi Dargie', 'ddargie2@rambler.ru', 'Advisor');
 insert into User (userID, userName, email, userType) values (4, 'Ada MacKessock', 'amackessock3@si.edu', 'Student');
-insert into User (userID, userName, email, userType) values (5, 'Teddie Kalkofen', 'tkalkofen4@dion.ne.jp', 'TA');
+insert into User (userID, userName, email, userType) values (5, 'Arhat Shah', 'shazam4@dion.ne.jp', 'TA');
 insert into User (userID, userName, email, userType) values (6, 'Charisse Southan', 'csouthan5@qq.com', 'Advisor');
 insert into User (userID, userName, email, userType) values (7, 'Merwyn Ormshaw', 'mormshaw6@narod.ru', 'Advisor');
 insert into User (userID, userName, email, userType) values (8, 'Kirstin Haythornthwaite', 'khaythornthwaite7@google.fr', 'Student');
 insert into User (userID, userName, email, userType) values (9, 'Laura Dimitrescu', 'ldimitrescu8@booking.com', 'Alumni');
-insert into User (userID, userName, email, userType) values (10, 'Maximilian Doumenc', 'mdoumenc9@linkedin.com', 'Alumni');
+insert into User (userID, userName, email, userType) values (10, 'BOb Vu', 'bobby9@linkedin.com', 'Alumni');
 insert into User (userID, userName, email, userType) values (11, 'Merrile Gorger', 'mgorgera@netvibes.com', 'Advisor');
 insert into User (userID, userName, email, userType) values (12, 'Johnnie MacLennan', 'jmaclennanb@sbwire.com', 'Advisor');
 insert into User (userID, userName, email, userType) values (13, 'Frasco Duddan', 'fduddanc@photobucket.com', 'Student');
@@ -158,6 +158,7 @@ insert into User (userID, userName, email, userType) values (37, 'Lonnard McMana
 insert into User (userID, userName, email, userType) values (38, 'Bili O''Haire', 'bohaire11@ucoz.ru', 'Advisor');
 insert into User (userID, userName, email, userType) values (39, 'Annadiane Pohling', 'apohling12@berkeley.edu', 'Alumni');
 insert into User (userID, userName, email, userType) values (40, 'Launce Munroe', 'lmunroe13@gizmodo.com', 'Student');
+insert into User (userID, userName, email, userType) values (100, 'Administrator', 'admin@admin.com', 'Admin');
 
 
 -- Company

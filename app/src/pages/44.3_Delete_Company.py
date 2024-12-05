@@ -13,14 +13,14 @@ st.write("Type in the company ID to delete that company")\
 
 with st.form("CompanyID"):
   company_id = st.text_input("Company ID")
-  submitted = st.form_submit_button("Delete This Company)
+  submitted = st.form_submit_button("Delete This Company")
   if submitted:
     url = f'http://api:4000/co/companies/{company_id}'
     
     try:
       response = requests.delete(url)
       response.raise_for_status()
-      st.write("Story deleted successfully")
+      st.write("Company deleted successfully")
     except:
       st.write("Could not connect connect to api.")
 

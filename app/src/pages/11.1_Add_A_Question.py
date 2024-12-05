@@ -25,10 +25,9 @@ with st.form("Tell my story"):
     data['companyID'] = companyID
     data['questionType'] = questionType
     data['userID'] = userID
-    st.write(data)
+    st.write("Question submitted successfully")
 
     requests.post('http://api:4000/q/questions', json=data)
 
 
-# Please keep company ID in the range 1-40 as that are as many companies as we have rn
-# TODO: Still need testing
+# Please keep company ID in the range 1-40
