@@ -24,4 +24,6 @@ with st.form("InterviewPrepID"):
     except:
       st.write("Could not connect connect to api.")
 
-# I already deleted 39 to test lol
+# I already deleted 39 and 40 to test lol
+# THIS IS THE ONLY DELETE ONE I HAVE WORKING BECAUSE I DONT WANNA TOUCH THE DB
+# SCARED OF BREAKING IT LOL

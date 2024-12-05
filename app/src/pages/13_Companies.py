@@ -7,6 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
+# Company functions are also essentially the same with students
 st.write("# Explore All Companies")
 
 companies = requests.get('http://api:4000/co/companies').json()

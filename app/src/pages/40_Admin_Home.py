@@ -9,4 +9,27 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title('System Admin Home Page')
+st.title(f"Welcome, Administrator!")
+st.write('')
+st.write('')
+st.write('### What would you like to do?')
+
+if st.button('Edit Question Bank',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/41_Question_Bank.py')
+
+if st.button('Edit Interview Prep Sessions ',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/42_Interview_Prep.py')
+
+if st.button('Edit Peer Stories',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/43_Peer_Stories.py')
+
+if st.button('Edit Companies',
+              type='primary',
+              use_container_width=True):
+  st.switch_page('pages/44_Companies.py')

@@ -34,9 +34,9 @@ SideBarLinks(show_home=True)
 
 # set the title of the page and provide a simple prompt. 
 logger.info("Loading the Home page of the app")
-st.title('CS 3200 Sample Semester Project App')
+st.title('NUReady')
 st.write('\n\n')
-st.write('### HI! As which user would you like to log in?')
+st.write('### Welcome to NUReady! As which user would you like to log in?')
 
 # For each of the user personas for which we are implementing
 # functionality, we put a button on the screen that the user 
@@ -66,6 +66,7 @@ if st.button('Act as Bob Vu, a Northeastern Alumni',
     st.session_state['role'] = 'alumni'
     st.session_state['first_name'] = 'Bob'
     logger.info("Logging in as Alumni")
+    st.session_state['id'] = '10'
     st.switch_page('pages/10_Alumni_Home.py')
 
 if st.button('Act as Sarah Mitchell, a Northeastern Career Advisor', 

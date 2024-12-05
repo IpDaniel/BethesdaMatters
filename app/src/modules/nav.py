@@ -54,17 +54,25 @@ def AlumniHomeNav():
         "pages/10_Alumni_Home.py", label="Alumni Home", icon="👤"
     )
 
+def AlumniQuestionBankNav():
+    st.sidebar.page_link(
+        "pages/11_Question_Bank.py", label="Question Bank", icon="🏦"
+    )
 
-# def PredictionNav():
-#     st.sidebar.page_link(
-#         "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
-#     )
+def AlumniPeerStoriesNav():
+    st.sidebar.page_link(
+        "pages/12_Peer_Stories.py", label="Peer Stories", icon="📖"
+    )
 
+def AlumniCompaniesNav():
+    st.sidebar.page_link(
+        "pages/13_Companies.py", label="Companies", icon="🏢"
+    )
 
-# def ClassificationNav():
-#     st.sidebar.page_link(
-#         "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-#     )
+def AlumniAnalyticsNav():
+    st.sidebar.page_link(
+        "pages/14_Analytics.py", label="Analytics", icon="📈"
+    )
 
 #### ------------------------ Role of Advisor ------------------------
 def AdvisorHomeNav():
@@ -115,6 +123,25 @@ def AdminNav():
         "pages/40_Admin_Home.py", label="Admin Home", icon="👤"
     )
 
+def AdminQuestionBankNav():
+    st.sidebar.page_link(
+        "pages/41_Question_Bank.py", label="Question Bank", icon="🏦"
+    )
+
+def AdminInterviewPrepNav():
+    st.sidebar.page_link(
+        "pages/42_Interview_Prep.py", label="Interview Prep", icon="🎤"
+    )
+
+def AdminPeerStoriesNav():
+    st.sidebar.page_link(
+        "pages/43_Peer_Stories.py", label="Peer Stories", icon="📖"
+    )
+
+def AdminCompaniesNav():
+    st.sidebar.page_link(
+        "pages/44_Companies.py", label="Companies", icon="🏢"
+    )
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -149,6 +176,10 @@ def SideBarLinks(show_home=False):
         # If the user role is a alumni, redirect to the alumni home page
         if st.session_state["role"] == "alumni":
             AlumniHomeNav()
+            AlumniQuestionBankNav()
+            AlumniPeerStoriesNav()
+            AlumniCompaniesNav()
+            AlumniAnalyticsNav()
 
         # If the user role is a advisor, redirect to the advisor home pag
         if st.session_state["role"] == "advisor":
@@ -161,6 +192,10 @@ def SideBarLinks(show_home=False):
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":
             AdminNav()
+            AdminQuestionBankNav()
+            AdminInterviewPrepNav()
+            AdminPeerStoriesNav()
+            AdminCompaniesNav()
 
     # Always show the About page at the bottom of the list of links
     # AboutPageNav()

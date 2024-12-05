@@ -9,7 +9,7 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title(f"Wecome to the Alumni Home Page, {st.session_state['first_name']}!")
+st.title(f"Welcome to the Alumni Home Page, {st.session_state['first_name']}!")
 st.write('')
 st.write('')
 st.write('### How can we help you today?')

@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Tell a Story")
+st.write("# Tell A Story")
 
 st.write("## Tell a story of your own job search experience")
 
