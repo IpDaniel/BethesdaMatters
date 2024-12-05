@@ -10,7 +10,7 @@ SideBarLinks()
 st.write("# Accessing Your Prep Schedule from Within Streamlit")
 
 id = st.session_state['id']
-url = f'http://api:4000/i/interviewprep/{id}'
+url = f'http://api:4000/i/interviewprep/student/{id}'
 questions = requests.get(url).json()
 
 try:

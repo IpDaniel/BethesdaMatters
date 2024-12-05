@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Accessing all interview Prep Schedule from Within Streamlit")
+st.write("# Accessing all interview Preps")
 
 questions = requests.get('http://api:4000/i/interviewprep').json()
 

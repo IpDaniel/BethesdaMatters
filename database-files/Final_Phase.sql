@@ -86,8 +86,8 @@ CREATE TABLE Iprep_question (
     questionID INT,
     interviewPrepID INT,
     PRIMARY KEY (questionID, interviewPrepID),
-    FOREIGN KEY (questionID) REFERENCES Question(questionID),
-    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID)
+    FOREIGN KEY (questionID) REFERENCES Question(questionID) ON DELETE CASCADE,
+    FOREIGN KEY (interviewPrepID) REFERENCES InterviewPrep(interviewPrepID) ON DELETE CASCADE
 );
 
 -- User_story (Relationship: accesses)

@@ -83,6 +83,7 @@ if st.button('Act as Arhat Shah, a Teaching Assistant',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'teachingassistant'
     st.session_state['first_name'] = 'Arhat'
+    st.session_state['id'] = '3'
     st.switch_page('pages/30_Teaching_Assistant_Home.py')
 
 if st.button('Act as System Administrator', 

@@ -19,7 +19,7 @@ if st.button('View Question Bank',
               use_container_width=True):
   st.switch_page('pages/01_Question_Bank.py')
 
-# wait but why is a student looking at all interview prep sessions there are
+
 if st.button('View Interview Prep Sessions ',
               type='primary',
               use_container_width=True):

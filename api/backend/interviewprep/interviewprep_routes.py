@@ -140,6 +140,50 @@ def get_specific_interviewprep(interviewPrepID):
     return the_response
 
 #------------------------------------------------------------
+# Get interview-prep for specific studentID
+# TESTED
+@interviewprep.route('/interviewprep/student/<studentID>', methods=['GET'])
+def get_specific_interviewprep_student(studentID):
+    current_app.logger.info(f'GET /interviewprep/student/{studentID} route')
+    
+    cursor = db.get_db().cursor()
+    cursor.execute('''SELECT i.interviewPrepID as sessionID, s.userID as studentID, t.UserID as taID, i.QuestionID as questionID, s.date as meetingDate
+                        FROM interview_prep_system.Stu_Iprep s
+                        JOIN interview_prep_system.Ta_Iprep t on s.interviewPrepID = t.interviewPrepID
+                        JOIN interview_prep_system.InterviewPrep i on i.interviewPrepID = s.interviewPrepID
+                        WHERE s.userID = %s
+                        ORDER BY sessionID
+    ''', (studentID,))
+    
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
+# Get interview-prep for specific taID
+# TESTED
+@interviewprep.route('/interviewprep/ta/<taID>', methods=['GET'])
+def get_specific_interviewprep_TA(taID):
+    current_app.logger.info(f'GET /interviewprep/ta/{taID} route')
+    
+    cursor = db.get_db().cursor()
+    cursor.execute('''SELECT i.interviewPrepID as sessionID, s.userID as studentID, t.UserID as taID, i.QuestionID as questionID, s.date as meetingDate
+                        FROM interview_prep_system.Stu_Iprep s
+                        JOIN interview_prep_system.Ta_Iprep t on s.interviewPrepID = t.interviewPrepID
+                        JOIN interview_prep_system.InterviewPrep i on i.interviewPrepID = s.interviewPrepID
+                        WHERE t.userID = %s
+                        ORDER BY sessionID
+    ''', (taID,))
+    
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
 # Update interview-prep info for specific interviewPrepID
 # TODO: Need to test
 @interviewprep.route('/interviewprep/<interviewPrepID>', methods=['PUT'])

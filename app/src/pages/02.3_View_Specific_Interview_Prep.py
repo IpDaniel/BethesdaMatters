@@ -7,15 +7,15 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.write("# Finding question in the Question Bank")
+st.write("# Finding interview prep session")
 st.write ("")
-st.write("Enter the question ID to view the question details")\
+st.write("Enter the prep session ID to view details")\
 
-with st.form("QuestionID"):
-  question_id = st.text_input("Question ID")
+with st.form("InterviewPrepID"):
+  question_id = st.text_input("InterviewPrep ID")
   submitted = st.form_submit_button("Submit")
   if submitted:
-    url = f'http://api:4000/q/questions/{question_id}'
+    url = f'http://api:4000/i/interviewprep/{question_id}'
     question = requests.get(url).json()
     try:
       st.write(question)

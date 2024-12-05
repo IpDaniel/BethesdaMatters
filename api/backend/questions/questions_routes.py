@@ -21,7 +21,7 @@ def get_questions():
     cursor = db.get_db().cursor()
 
     # Build query based on filters
-    query = '''SELECT q.questionID, q.questionType, q.companyID, q.userID
+    query = '''SELECT q.questionID, q.questionType as Question_Type, q.companyID as ID_of_company_who_asked, q.userID as ID_of_user_who_added_the_question
                FROM interview_prep_system.Question q'''
     
     conditions = []
@@ -189,7 +189,7 @@ def get_question(question_id):
     cursor = db.get_db().cursor()
     try:
         # Get question with the specified ID
-        cursor.execute('''SELECT questionID, companyID, questionType, userID
+        cursor.execute('''SELECT questionID, companyID as ID_of_company_who_asked, questionType as Question_Type, userID as ID_of_user_who_added_the_question
                          FROM Question 
                          WHERE questionID = %s''', (question_id,))
         
