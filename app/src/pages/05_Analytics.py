@@ -7,9 +7,11 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.title("View Analytics")
-st.write('')
-st.write('')
-st.write('### What kind of data would you like to inquire today?')
+st.write("# Explore the most relevant analytics")
 
-# TODO: Need help implementing this cos idk what its about tbh
+analytics = requests.get('http://api:4000/a/analytics').json()
+
+try:
+  st.dataframe(analytics) 
+except:
+  st.write("Could not connect connect to api.")

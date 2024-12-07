@@ -10,7 +10,7 @@ CREATE TABLE User (
     userID INT PRIMARY KEY AUTO_INCREMENT,
     userName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    userType ENUM('Student', 'Alumni', 'TA', 'Advisor') NOT NULL
+    userType ENUM('Student', 'Alumni', 'TA', 'Advisor', 'Admin') NOT NULL
 );
 
 

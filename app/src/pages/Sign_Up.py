@@ -22,7 +22,7 @@ with st.form("Register User"):
         help="Select the type of user."
     )
     
-    submitted = st.form_submit_button("Submit")
+    submitted = st.form_submit_button("Sign up")
     
     if submitted:
         try:
