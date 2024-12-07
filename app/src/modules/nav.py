@@ -77,7 +77,7 @@ def AdvisorHomeNav():
 
 def AdvisorUserNav():
     st.sidebar.page_link(
-        "pages/25_User.py", label="Users", icon="🌺"
+        "pages/25_Users.py", label="Users", icon="🌺"
     )
 
 def AdvisorQuestionBank():
@@ -113,7 +113,7 @@ def TAHomeNav():
 
 def TAUserNav():
     st.sidebar.page_link(
-        "pages/25_User.py", label="Users", icon="🌺"
+        "pages/25_Users.py", label="Users", icon="🌺"
     )
 
 def TAQuestionBank():

@@ -75,6 +75,7 @@ if st.button('Act as Sarah Mitchell, a Northeastern Career Advisor',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'Advisor'
     st.session_state['first_name'] = 'Sarah'
+    st.session_state['id'] = '5'
     logger.info("Logging in as Advisor")
     st.switch_page('pages/20_Advisor_Home.py')
 
