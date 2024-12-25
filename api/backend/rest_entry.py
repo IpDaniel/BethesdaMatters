@@ -3,6 +3,7 @@ from flask import Flask
 from backend.db_connection import db
 from backend.companies.companies_routes import companies
 from backend.navigation.navigation_routes import navigation
+from backend.articles.article import articles
 import os
 from dotenv import load_dotenv
 
@@ -40,6 +41,7 @@ def create_app():
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(companies,   url_prefix='/co')
     app.register_blueprint(navigation,  url_prefix='/nav')
+    app.register_blueprint(articles,  url_prefix='/articles')
 
     # Don't forget to return the app object
     return app

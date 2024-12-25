@@ -4,254 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bethesda News - Your Local News Source</title>
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        header {
-            background-color: white;
-            color: black;
-            padding: 1rem;
-            text-align: center;
-        }
-        .masthead {
-            font-size: 2.5rem;
-            margin: 0;
-            color: black;
-        }
-        nav {
-            background-color: white;
-            padding: 0.5rem;
-            border-top: 1px solid #1a1a1a;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 1rem;
-        }
-        nav ul li a {
-            color: black;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            background-image: linear-gradient(#0066cc, #0066cc);
-            background-size: 0% 2px;
-            background-position: 0 100%;
-            background-repeat: no-repeat;
-            transition: background-size 0.3s ease, color 0.2s ease;
-            padding-bottom: 2px;
-        }
-        nav ul li a:hover {
-            /* color: #0066cc; */
-            background-size: 100% 2px;
-        }
-        .main-content {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 3rem;
-        }
-        .featured-article {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-        }
-        .sidebar {
-            background-color: #f5f5f5;
-            padding: 1.5rem;
-            border-radius: 4px;
-        }
-        footer {
-            background-color: #1a1a1a;
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            width: 100%;
-            margin-top: 2rem;
-        }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            text-align: left;
-            margin-bottom: 2rem;
-        }
-        .footer-section h4 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .footer-section a:hover {
-            color: white;
-        }
-        .footer-bottom {
-            border-top: 1px solid #333;
-            padding-top: 1rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-        .featured-article h2 {
-            margin-bottom: 0.5rem;
-        }
-        
-        .featured-article h2 a {
-            color: #000;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            background-image: linear-gradient(#0066cc, #0066cc);
-            background-size: 0% 2px;
-            background-position: 0 100%;
-            background-repeat: no-repeat;
-            transition: background-size 0.3s ease, color 0.2s ease;
-            padding-bottom: 2px;
-        }
-        
-        .featured-article h2 a:hover {
-            color: #0066cc;
-            background-size: 100% 2px;
-        }
-        .article-image-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            border-radius: 4px;
-        }
-
-        .article-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .article-image-container:hover img {
-            transform: scale(1.05);
-        }
-
-        .featured-article .read-more {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #1a1a1a;
-            color: white;
-            text-decoration: none;
-            border: 2px solid #1a1a1a;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .featured-article .read-more:hover {
-            background-color: white;
-            color: #1a1a1a;
-        }
-
-        .social-links {
-            margin: 1rem 0;
-        }
-        
-        .social-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 0.9rem;
-            padding: 5px 10px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            border-color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .article-meta {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 0rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .article-meta span {
-            margin-right: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .article-meta span:not(:last-child)::after {
-            content: '|';
-            margin-left: 0.75rem;
-            color: #ddd;
-            font-size: 0.8em;
-        }
-
-        .article-meta a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .article-meta a:hover {
-            color: #0066cc;
-        }
-
-        .sidebar h3 {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #ddd;
-        }
-
-        .sidebar-item {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .sidebar-item-content h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-        }
-
-        .sidebar-item-content p {
-            margin: 0 0 0.25rem 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .weather-icon {
-            font-size: 2.5rem;
-            color: #f4b942;
-            margin-top: 0.5rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
 </head>
 <body>
     <header>
@@ -273,47 +27,85 @@
 
     <div class="main-content">
         <main>
-            <article class="featured-article">
-                <div class="article-image-container">
-                    <img src="https://placehold.co/800x450" alt="Community Center Renovation">
-                </div>
-                <h2><a href="#">Breaking News: Local Community Center Receives Major Renovation Grant</a></h2>
-                <div class="article-meta">
-                    <span>By <a href="#">Sarah Johnson</a></span>
-                    <span>Published March 15, 2024</span>
-                    <span>5 min read</span>
-                </div>
-                <p>The Bethesda Community Center has been awarded a $2 million grant for renovations and expansion...</p>
-                <a href="#" class="read-more">Read More →</a>
-            </article>
+            <div class="articles-grid">
+                <div class="side-articles">
+                    <article class="featured-article side-article">
+                        <div class="article-image-container">
+                            <img src="https://www.visitmaryland.org/sites/default/files/styles/16_9_s/public/legacy_images/Bethesda%20Row_credit_Victoria%20Pickering-1200px.jpg?itok=EqgZYd4R" alt="Local Business">
+                        </div>
+                        <h2><a href="#">Local Business District Sees Record Growth</a></h2>
+                        <div class="article-meta">
+                            <span>By <a href="#">James Wilson</a></span>
+                            <span>March 15, 2024</span>
+                        </div>
+                        <p>Downtown area welcomes five new businesses this month...</p>
+                    </article>
 
-            <article class="featured-article">
-                <div class="article-image-container">
-                    <img src="https://placehold.co/800x450" alt="Restaurant Week">
+                    <article class="featured-article side-article">
+                        <div class="article-image-container">
+                            <img src="https://montgomeryparks.org/wp-content/uploads/2023/09/Norwood-Local-Park-Park-Activity-Building-2023-e1702583823103.jpg" alt="Park Renovation">
+                        </div>
+                        <h2><a href="#">City Park Renovation Nears Completion</a></h2>
+                        <div class="article-meta">
+                            <span>By <a href="#">Emma Davis</a></span>
+                            <span>March 15, 2024</span>
+                        </div>
+                        <p>New facilities to open next month...</p>
+                    </article>
                 </div>
-                <h2><a href="#">Downtown Bethesda Restaurant Week Returns Next Month</a></h2>
-                <div class="article-meta">
-                    <span>By <a href="#">Michael Chen</a></span>
-                    <span>Published March 14, 2024</span>
-                    <span>3 min read</span>
-                </div>
-                <p>More than 30 local restaurants will participate in this year's culinary celebration...</p>
-                <a href="#" class="read-more">Read More →</a>
-            </article>
 
-            <article class="featured-article">
-                <div class="article-image-container">
-                    <img src="https://placehold.co/800x450" alt="STEM Program">
-                </div>
-                <h2><a href="#">School Board Approves New STEM Program Initiative</a></h2>
-                <div class="article-meta">
-                    <span>By <a href="#">Rachel Martinez</a></span>
-                    <span>Published March 14, 2024</span>
-                    <span>4 min read</span>
-                </div>
-                <p>Local schools to receive additional funding for science and technology programs...</p>
-                <a href="#" class="read-more">Read More →</a>
-            </article>
+                <article class="featured-article">
+                    <div class="article-image-container">
+                        <img src="https://www.ymcadc.org/wp-content/uploads/2022/06/YMCA-BCC-scaled.jpg" alt="Community Center Renovation">
+                    </div>
+                    <h2><a href="/articles/1">Breaking News: Local Community Center Receives Major Renovation Grant</a></h2>
+                    <div class="article-meta">
+                        <span>By <a href="#">Sarah Johnson</a></span>
+                        <span>Published March 15, 2024</span>
+                        <span>5 min read</span>
+                    </div>
+                    <p>The Bethesda Community Center has been awarded a $2 million grant for renovations and expansion. The funds will support modernizing facilities, adding a new youth recreation space, and improving accessibility throughout the building. Construction is expected to begin this summer...</p>
+                    <a href="/articles/1" class="read-more">Read More →</a>
+                </article>
+            </div>
+
+            <div class="articles-row">
+                <article class="featured-article row-article">
+                    <div class="article-image-container">
+                        <img src="https://patch.com/img/cdn20/users/23681204/20221005/125134/styles/patch_image/public/bethesda-row-ariel___05124845542.jpg" alt="Restaurant Week">
+                    </div>
+                    <h2><a href="#">Downtown Restaurant Week Returns</a></h2>
+                    <div class="article-meta">
+                        <span>By <a href="#">Michael Chen</a></span>
+                        <span>March 14, 2024</span>
+                    </div>
+                    <p>More than 30 local restaurants will participate...</p>
+                </article>
+
+                <article class="featured-article row-article">
+                    <div class="article-image-container">
+                        <img src="https://images.foxtv.com/static.fox5dc.com/www.fox5dc.com/content/uploads/2023/11/1280/720/download-1.jpg?ve=1&tl=1" alt="STEM Program">
+                    </div>
+                    <h2><a href="#">New STEM Program Initiative</a></h2>
+                    <div class="article-meta">
+                        <span>By <a href="#">Rachel Martinez</a></span>
+                        <span>March 14, 2024</span>
+                    </div>
+                    <p>Local schools to receive additional funding...</p>
+                </article>
+
+                <article class="featured-article row-article">
+                    <div class="article-image-container">
+                        <img src="https://lh5.googleusercontent.com/proxy/8lCH9UAql7TD71Zht9Ul5hQ3ik5b3Ba9Sa_k4YL2kZmL9YyY4z4IZyjTESOn8raGo0eEJyJ4SXrZbsdKY-g4dCnJYj64rrRz_nTaOIxReRUHyS2WpqvIKSnu9pmuYZoQ6smlSe0JcRIGkUJUIDx4zWbSFXP6zGbamQZR2pLrKwfntmaJGNg8rDgDH8AMIoer23U" alt="Arts Festival">
+                    </div>
+                    <h2><a href="#">Annual Arts Festival Expands</a></h2>
+                    <div class="article-meta">
+                        <span>By <a href="#">David Kim</a></span>
+                        <span>March 14, 2024</span>
+                    </div>
+                    <p>New venues added to accommodate growth...</p>
+                </article>
+            </div>
         </main>
 
         <aside class="sidebar">
