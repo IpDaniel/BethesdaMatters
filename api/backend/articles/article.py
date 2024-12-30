@@ -5,6 +5,7 @@ from flask import make_response
 from flask import current_app
 from flask import render_template
 from backend.db_connection import db
+from datetime import datetime
 
 articles = Blueprint('articles', __name__)
 
@@ -105,5 +106,44 @@ def featured_articles():
             "imageAlt": "Students Participating in Recycling Program"
         }
     ]
-    
+    # featured_articles_data = get_featured_articles()
     return jsonify(featured_articles_data)
+
+
+def get_featured_articles():
+    """
+    Fetches the 6 articles with highest priority scores from the database.
+    Returns a list of article dictionaries with required fields for the featured articles view.
+    """
+    query = """
+        SELECT a.id, a.title, a.image_url, a.summary, a.created_at,
+               CONCAT(au.first_name, ' ', au.last_name) as author_name
+        FROM articles a
+        LEFT JOIN article_authors aa ON a.id = aa.article_id
+        LEFT JOIN authors au ON aa.author_id = au.id
+        ORDER BY a.priority_score DESC
+        LIMIT 6
+    """
+    
+    articles = []
+    with db.get_db().cursor() as cursor:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        for row in results:
+            articles.append({
+                "id": str(row[0]),
+                "title": row[1],
+                "imageUrl": row[2],
+                "excerpt": row[3],
+                "author": row[5],
+                "date": row[4].strftime("%B %d, %Y"),
+                "readTime": "5 min read",  # This could be calculated based on content length
+                "imageAlt": row[1]  # Using title as alt text for now
+            })
+    
+    return articles
+
+
+
+

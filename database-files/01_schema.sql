@@ -8,6 +8,7 @@ create table articles (
     image_url varchar(255) not null,
     summary text not null,
     content text not null,
+    priority_score int not null,
     created_at datetime default current_timestamp not null
 );
 
