@@ -35,3 +35,10 @@ create table article_authors (
     foreign key (article_id) references articles(id),
     foreign key (author_id) references authors(id)
 );
+
+create table genre_tags (
+    article_id int,
+    genre enum('Local News', 'Politics', 'Business', 'Sports', 'Culture', 'Opinion') not null,
+    foreign key (article_id) references articles(id)
+);
+
