@@ -119,8 +119,7 @@ def write_article():
         "Technology", 
         "Web Development"
     ],
-    "author_id": 1,
-    "coauthor_ids": [
+    "author_ids": [
         2,
         3
     ],
@@ -181,12 +180,13 @@ def write_article():
         
         article_id = cursor.fetchone()['id']
         
-        # Insert author relationship
+        # Insert author relationships
         author_query = """
             INSERT INTO article_authors (article_id, author_id)
             VALUES (%s, %s)
         """
-        cursor.execute(author_query, (article_id, article_data['author_id']))
+        for author_id in article_data['author_ids']:
+            cursor.execute(author_query, (article_id, author_id))
         
         # Insert content elements
         element_query = """
