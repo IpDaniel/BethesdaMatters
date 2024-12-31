@@ -2,7 +2,7 @@ services:
 
   api:
     build: ./api
-    container_name: web-api
+    container_name: bethesda_matters_api
     hostname: web-api
     volumes: ['./api:/apicode']
     ports:
@@ -12,7 +12,7 @@ services:
     env_file:
       - ./api/.env
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: bethesda_matters_db
     hostname: db
     volumes:
       - ./database-files:/docker-entrypoint-initdb.d/:ro

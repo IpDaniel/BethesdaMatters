@@ -1,3 +1,23 @@
+use bethesda_matters;
+
+SELECT 'Starting example data script' as message;
+
+-- Ensure we're in strict SQL mode
+SET SQL_MODE = "STRICT_ALL_TABLES";
+
+-- Disable foreign key checks temporarily for clean inserts
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Clear existing data (optional, but recommended for example data)
+TRUNCATE TABLE article_authors;
+TRUNCATE TABLE article_elements;
+TRUNCATE TABLE genre_tags;
+TRUNCATE TABLE articles;
+TRUNCATE TABLE authors;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- Article 1
 -- ----------------------------------------------
 
@@ -257,6 +277,8 @@ INSERT INTO article_authors (article_id, author_id) VALUES
 -- Add genre tags
 INSERT INTO genre_tags (article_id, genre) VALUES
 (@article_id, 'Local News');
+
+SELECT 'Example data script completed successfully' as message;
 
 
 

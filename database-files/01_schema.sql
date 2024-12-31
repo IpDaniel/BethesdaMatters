@@ -1,6 +1,9 @@
-drop database if exists bethesda_news;
-create database bethesda_news;
-use bethesda_news;
+drop database if exists bethesda_matters;
+create database bethesda_matters;
+use bethesda_matters;
+
+-- Add this line to verify the database was created
+SELECT 'Database created successfully' as message;
 
 create table articles (
     id int primary key auto_increment,
@@ -42,4 +45,7 @@ create table genre_tags (
     genre enum('Local News', 'Politics', 'Business', 'Sports', 'Culture', 'Opinion') not null,
     foreign key (article_id) references articles(id)
 );
+
+-- Add this at the end to verify all tables were created
+SELECT 'Schema created successfully' as message;
 
