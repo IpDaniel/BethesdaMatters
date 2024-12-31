@@ -115,7 +115,15 @@ def write_article():
     "cover_image_caption": "A comprehensive guide to building web applications using modern technologies",
     "summary": "A comprehensive guide to building web applications using modern technologies",
     "date": "March 20, 2024",
+    "genre_tags": [
+        "Technology", 
+        "Web Development"
+    ],
     "author_id": 1,
+    "coauthor_ids": [
+        2,
+        3
+    ],
     "content": [
             {
                 "type": "text",
