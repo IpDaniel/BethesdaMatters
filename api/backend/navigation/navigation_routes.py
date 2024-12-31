@@ -5,7 +5,7 @@ from flask import make_response
 from flask import current_app
 from flask import render_template
 from backend.db_connection import db
-
+from flask import redirect, url_for
 navigation = Blueprint('navigation', __name__)
 
 @navigation.route('/', methods=['GET'])
