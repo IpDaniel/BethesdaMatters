@@ -4,6 +4,7 @@ from backend.db_connection import db
 from backend.companies.companies_routes import companies
 from backend.navigation.navigation_routes import navigation
 from backend.articles.article import articles
+from backend.writers.writers import writers
 import os
 from dotenv import load_dotenv
 
@@ -42,6 +43,7 @@ def create_app():
     app.register_blueprint(companies,   url_prefix='/co')
     app.register_blueprint(navigation)
     app.register_blueprint(articles,  url_prefix='/articles')
+    app.register_blueprint(writers,  url_prefix='/writers')
 
     # Don't forget to return the app object
     return app

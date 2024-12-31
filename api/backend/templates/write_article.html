@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Article - Bethesda Matters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    <style>
+        .article-form {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .genre-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .genre-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-button {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #333;
+        }
+
+        #articleElements {
+            margin-top: 1rem;
+        }
+
+        .element-container {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .element-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .control-button {
+            padding: 0.5rem 1rem;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="masthead">Bethesda Matters</h1>
+        <p>Article Submission Portal</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">My Articles</a></li>
+        </ul>
+    </nav>
+
+    <main class="article-form">
+        <h2>Write New Article</h2>
+        <form id="articleForm" method="POST" action="/submit-article">
+            <div class="form-group">
+                <label for="title">Article Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mainImage">Main Image URL</label>
+                <input type="url" id="mainImage" name="image_url" required>
+            </div>
+
+            <div class="form-group">
+                <label for="summary">Article Summary</label>
+                <textarea id="summary" name="summary" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Genre Tags</label>
+                <div class="genre-options">
+                    <div class="genre-option">
+                        <input type="checkbox" id="localNews" name="genres" value="Local News">
+                        <label for="localNews">Local News</label>
+                    </div>
+                    <div class="genre-option">
+                        <input type="checkbox" id="politics" name="genres" value="Politics">
+                        <label for="politics">Politics</label>
+                    </div>
+                    <div class="genre-option">
+                        <input type="checkbox" id="business" name="genres" value="Business">
+                        <label for="business">Business</label>
+                    </div>
+                    <div class="genre-option">
+                        <input type="checkbox" id="sports" name="genres" value="Sports">
+                        <label for="sports">Sports</label>
+                    </div>
+                    <div class="genre-option">
+                        <input type="checkbox" id="culture" name="genres" value="Culture">
+                        <label for="culture">Culture</label>
+                    </div>
+                    <div class="genre-option">
+                        <input type="checkbox" id="opinion" name="genres" value="Opinion">
+                        <label for="opinion">Opinion</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Article Content</label>
+                <div id="articleElements"></div>
+                <button type="button" class="control-button" onclick="addTextElement()">Add Text</button>
+                <button type="button" class="control-button" onclick="addImageElement()">Add Image</button>
+            </div>
+
+            <button type="submit" class="submit-button">Submit Article</button>
+        </form>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/article_editor.js') }}"></script>
+</body>
+</html>
