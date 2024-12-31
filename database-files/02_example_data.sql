@@ -177,7 +177,7 @@ INSERT INTO articles (title, image_url, summary, content, priority_score) VALUES
     'https://example.com/theater.jpg',
     'The Strand Theater, a historic cultural landmark, has unveiled its ambitious summer arts program, promising an exciting season of creativity and performance.',
     'The Strand Theater, a historic cultural landmark, has unveiled its ambitious summer arts program, promising an exciting season of creativity and performance. This initiative will bring together local artists, performers, and the community for a series of workshops, shows, and exhibitions celebrating the arts...',
-    7
+    6
 );
 
 -- Get the last inserted article ID
@@ -219,7 +219,7 @@ INSERT INTO articles (title, image_url, summary, content, priority_score) VALUES
     'https://example.com/school-environment.jpg',
     'Local schools have taken a significant step toward combating climate change with the launch of an innovative environmental initiative aimed at reducing their collective carbon footprint.',
     'Local schools have taken a significant step toward combating climate change with the launch of an innovative environmental initiative aimed at reducing their collective carbon footprint. The program introduces comprehensive recycling measures, sustainability workshops, and eco-friendly practices into classrooms and campuses across the district...',
-    8
+    5
 );
 
 -- Get the last inserted article ID
