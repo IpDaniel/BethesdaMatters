@@ -5,6 +5,7 @@ from flask import make_response
 from flask import current_app
 from flask import render_template
 from backend.db_connection import db
+from backend.articles.article_helpers import text_content_crop, get_featured_articles
 from datetime import datetime
 
 articles = Blueprint('articles', __name__)
@@ -80,7 +81,7 @@ def article(article_id):
         }
 
         cursor.close()
-        return render_template('article.html', article=article_data)
+        return render_template('article.html', article=article_data), 200
         
     except Exception as e:
         current_app.logger.error(f"Error fetching article {article_id}: {str(e)}")
@@ -102,59 +103,5 @@ def featured_articles():
         }
     ]
     featured_articles_data = get_featured_articles()
-
-
-    return jsonify(featured_articles_data)
-
-
-def get_featured_articles():
-    """
-    Fetches the 6 articles with highest priority scores from the database.
-    Returns a list of article dictionaries with required fields for the featured articles view.
-    """
-    query = """
-        SELECT 
-            a.id,
-            a.title,
-            a.image_url,
-            a.summary,
-            a.created_at,
-            CONCAT(au.first_name, ' ', au.last_name) as author_name
-        FROM articles a
-        LEFT JOIN article_authors aa ON a.id = aa.article_id
-        LEFT JOIN authors au ON aa.author_id = au.id
-        ORDER BY a.priority_score DESC
-        LIMIT 6
-    """
-    
-    articles = []
-    try:
-        connection = db.get_db()
-        cursor = connection.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        
-        if not results:
-            current_app.logger.warning("No articles found in database")
-            return []
-            
-        for row in results:
-            articles.append({
-                "id": str(row['id']),
-                "title": row['title'],
-                "imageUrl": row['image_url'],
-                "excerpt": row['summary'],
-                "author": row['author_name'] or 'Anonymous',
-                "date": row['created_at'].strftime("%B %d, %Y"),
-                "readTime": "5 min read",
-                "imageAlt": row['title']
-            })
-        
-        cursor.close()
-        return articles
-    except Exception as e:
-        current_app.logger.error(f"Error fetching featured articles: {str(e)}")
-        return []
-
-
-
+    featured_articles_data[0]['excerpt'] = text_content_crop(featured_articles_data[0]['id'], 200)
+    return jsonify(featured_articles_data), 200
