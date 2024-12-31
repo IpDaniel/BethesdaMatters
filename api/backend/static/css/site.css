@@ -120,6 +120,7 @@ footer {
 }
 .featured-article h2 {
     margin-bottom: 0.15rem;
+    font-size: 1.2rem;
 }
 
 .featured-article h2 a {
@@ -309,4 +310,14 @@ header p {
 
 .featured-article p {
     margin: 0.5rem 0;
+}
+
+.articles-grid > .featured-article h2 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+}
+
+.articles-grid > .featured-article p {
+    font-size: 1.1rem;
+    line-height: 1.5;
 }

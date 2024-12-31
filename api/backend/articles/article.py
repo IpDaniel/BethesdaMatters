@@ -103,5 +103,5 @@ def featured_articles():
         }
     ]
     featured_articles_data = get_featured_articles()
-    featured_articles_data[0]['excerpt'] = text_content_crop(featured_articles_data[0]['id'], 200)
+    featured_articles_data[0]['excerpt'] = text_content_crop(featured_articles_data[0]['id'], 600)
     return jsonify(featured_articles_data), 200
