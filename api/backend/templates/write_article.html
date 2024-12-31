@@ -115,7 +115,7 @@
         <form id="articleForm" method="POST" action="/submit-article">
             <div class="form-group">
                 <label for="title">Article Title</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" required maxlength="80">
             </div>
 
             <div class="form-group">
@@ -125,7 +125,7 @@
 
             <div class="form-group">
                 <label for="summary">Article Summary</label>
-                <textarea id="summary" name="summary" required></textarea>
+                <textarea id="summary" name="summary" required maxlength="165"></textarea>
             </div>
 
             <div class="form-group">
@@ -169,6 +169,6 @@
         </form>
     </main>
 
-    <script src="{{ url_for('static', filename='js/article_editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/article_builder.js') }}"></script>
 </body>
 </html>

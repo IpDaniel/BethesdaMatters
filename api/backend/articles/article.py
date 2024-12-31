@@ -87,7 +87,6 @@ def article(article_id):
         current_app.logger.error(f"Error fetching article {article_id}: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 
-
 @articles.route('/featured-articles')
 def featured_articles():
     featured_articles_data = [
@@ -105,3 +104,119 @@ def featured_articles():
     featured_articles_data = get_featured_articles()
     featured_articles_data[0]['excerpt'] = text_content_crop(featured_articles_data[0]['id'], 600)
     return jsonify(featured_articles_data), 200
+
+@articles.route('/write-article', methods=['POST'])
+def write_article():
+    """Inserts a new article into the database
+    expecting json with the following structure:
+    {
+    "title": "How to Build a Modern Web Application",
+    "cover_image": "https://example.com/images/web-dev.jpg",
+    "cover_image_caption": "A comprehensive guide to building web applications using modern technologies",
+    "summary": "A comprehensive guide to building web applications using modern technologies",
+    "date": "March 20, 2024",
+    "author_id": 1,
+    "content": [
+            {
+                "type": "text",
+                "value": "In this article, we'll explore the fundamental concepts of modern web development..."
+            },
+            {
+                "type": "image",
+                "url": "https://example.com/images/architecture-diagram.png",
+                "caption": "Typical web application architecture"
+            },
+            {
+                "type": "text",
+                "value": "Let's start by examining the frontend components..."
+            }
+        ]
+    }"""
+    try:
+        article_data = request.get_json()
+        
+        # Insert main article record
+        article_query = """
+            INSERT INTO articles (
+                title, 
+                image_url, 
+                summary,
+                content,
+                priority_score,
+                created_at
+            )
+            VALUES (%s, %s, %s, %s, %s, %s)
+            RETURNING id
+        """
+        
+        connection = db.get_db()
+        cursor = connection.cursor()
+        
+        # Get the highest priority_score and increment by 1
+        cursor.execute("SELECT COALESCE(MAX(priority_score), 0) + 1 as next_score FROM articles")
+        next_priority_score = cursor.fetchone()['next_score']
+        
+        # Combine all text content for the main content field
+        full_content = '\n\n'.join(
+            element['value'] for element in article_data['content'] 
+            if element['type'] == 'text'
+        )
+        
+        cursor.execute(article_query, (
+            article_data['title'],
+            article_data['cover_image'],
+            article_data.get('summary', ''),  # You might want to make this required in your API
+            full_content,
+            next_priority_score,
+            datetime.strptime(article_data['date'], "%B %d, %Y")
+        ))
+        
+        article_id = cursor.fetchone()['id']
+        
+        # Insert author relationship
+        author_query = """
+            INSERT INTO article_authors (article_id, author_id)
+            VALUES (%s, %s)
+        """
+        cursor.execute(author_query, (article_id, article_data['author_id']))
+        
+        # Insert content elements
+        element_query = """
+            INSERT INTO article_elements 
+            (article_id, element_type, text_content, image_url, ordering_index)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        
+        for index, element in enumerate(article_data['content']):
+            if element['type'] == 'text':
+                cursor.execute(element_query, (
+                    article_id,
+                    'text',
+                    element['value'],
+                    None,
+                    index
+                ))
+            elif element['type'] == 'image':
+                cursor.execute(element_query, (
+                    article_id,
+                    'image',
+                    element['caption'],
+                    element['url'],
+                    index
+                ))
+        
+        connection.commit()
+        cursor.close()
+        
+        return jsonify({
+            'message': 'Article created successfully',
+            'article_id': article_id
+        }), 201
+        
+    except KeyError as e:
+        return jsonify({'error': f'Missing required field: {str(e)}'}), 400
+    except Exception as e:
+        current_app.logger.error(f"Error creating article: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+
