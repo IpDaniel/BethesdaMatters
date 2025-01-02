@@ -160,3 +160,83 @@ function setupAuthorSelectionValidation() {
         });
     });
 }
+
+document.getElementById('articleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get all form elements
+    const title = document.getElementById('title').value;
+    const coverImage = document.getElementById('mainImage').value;
+    const coverImageCaption = document.getElementById('mainImageCaption').value;
+    const summary = document.getElementById('summary').value;
+    
+    // Get selected genres
+    const genreCheckboxes = document.querySelectorAll('input[name="genres"]:checked');
+    const genres = Array.from(genreCheckboxes).map(cb => cb.value);
+    
+    // Get selected authors
+    const authorSelects = document.querySelectorAll('[id^="author"]');
+    const authorIds = Array.from(authorSelects)
+        .map(select => parseInt(select.value))
+        .filter(id => !isNaN(id));
+    
+    // Get content elements
+    const contentElements = Array.from(document.querySelectorAll('.element-container'))
+        .sort((a, b) => {
+            return parseInt(a.querySelector('input[name$="[order]"]').value) - 
+                   parseInt(b.querySelector('input[name$="[order]"]').value);
+        })
+        .map(container => {
+            const type = container.querySelector('input[name$="[type]"]').value;
+            if (type === 'text') {
+                return {
+                    type: 'text',
+                    value: container.querySelector('textarea').value
+                };
+            } else {
+                return {
+                    type: 'image',
+                    url: container.querySelector('input[type="url"]').value,
+                    caption: container.querySelector('textarea').value
+                };
+            }
+        });
+
+    // Create the payload
+    const payload = {
+        title,
+        cover_image: coverImage,
+        cover_image_caption: coverImageCaption,
+        summary,
+        date: new Date().toLocaleDateString('en-US', { 
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        }),
+        genre_tags: genres,
+        author_ids: authorIds,
+        content: contentElements
+    };
+
+    // Send the request
+    fetch('/articles/write-article', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.article_id) {
+            // Redirect to the new article
+            window.location.href = `/articles/${data.article_id}`;
+        } else {
+            alert('Error creating article: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error creating article. Please try again.');
+    });
+});
