@@ -196,6 +196,14 @@ def write_article():
         """
         for author_id in article_data['author_ids']:
             cursor.execute(author_query, (article_id, author_id))
+            
+        # Insert genre tags
+        genre_query = """
+            INSERT INTO genre_tags (article_id, genre)
+            VALUES (%s, %s)
+        """
+        for genre in article_data['genre_tags']:
+            cursor.execute(genre_query, (article_id, genre))
         
         # Insert content elements
         element_query = """
@@ -354,6 +362,12 @@ def update_article(article_id):
     author_query = "INSERT INTO article_authors (article_id, author_id) VALUES (%s, %s)"
     for author_id in article_data['author_ids']:
         cursor.execute(author_query, (article_id, author_id))
+    
+    # Update genre tags
+    cursor.execute("DELETE FROM genre_tags WHERE article_id = %s", (article_id,))
+    genre_query = "INSERT INTO genre_tags (article_id, genre) VALUES (%s, %s)"
+    for genre in article_data['genre_tags']:
+        cursor.execute(genre_query, (article_id, genre))
     
     # Update content elements
     cursor.execute("DELETE FROM article_elements WHERE article_id = %s", (article_id,))

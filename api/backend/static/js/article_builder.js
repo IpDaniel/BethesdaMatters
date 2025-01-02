@@ -66,14 +66,41 @@ function updateOrder() {
     });
 }
 
-// Fetch authors when the page loads
-fetch('/writers/author_ids', {
-    method: 'GET'
-})
-.then(response => response.json())
-.then(data => {
-    authors = data;
-    initializeAuthorSelects();
+// Add this function to create the genre options HTML
+function createGenreOptions(genres) {
+    return genres.map(genre => `
+        <div class="genre-option">
+            <input type="checkbox" id="${genre.toLowerCase().replace(/\s+/g, '')}" 
+                   name="genres" value="${genre}">
+            <label for="${genre.toLowerCase().replace(/\s+/g, '')}">${genre}</label>
+        </div>
+    `).join('');
+}
+
+// Add this to your existing page load fetch operations
+document.addEventListener('DOMContentLoaded', function() {
+    // Existing authors fetch
+    fetch('/writers/author_ids', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        authors = data;
+        initializeAuthorSelects();
+    });
+
+    // New genres fetch
+    fetch('/writers/genre-tag-options', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(genres => {
+        const genreOptionsContainer = document.querySelector('.genre-options');
+        genreOptionsContainer.innerHTML = createGenreOptions(genres);
+    })
+    .catch(error => {
+        console.error('Error fetching genre options:', error);
+    });
 });
 
 function createAuthorSelect(index) {

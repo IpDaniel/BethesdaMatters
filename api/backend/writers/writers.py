@@ -54,3 +54,33 @@ def author_indices():
 def edit_article(article_id):
     return render_template('edit_article.html', article_id=article_id)
 
+@writers.route('/genre-tag-options', methods=['GET'])
+def genre_tag_options():
+    """Returns a list of all available genre tags by querying the database schema.
+    
+    Returns:
+        JSON array of strings: ["Local News", "Politics", "Business", "Sports", "Culture", "Opinion"]
+    """
+    conn = db.get_db()
+    cursor = conn.cursor()
+    
+    # Query to get enum values from the database schema
+    query = """
+        SELECT SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE) - 6) as enum_values
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = 'bethesda_matters'
+        AND TABLE_NAME = 'genre_tags' 
+        AND COLUMN_NAME = 'genre'
+    """
+    
+    cursor.execute(query)
+    result = cursor.fetchone()
+    cursor.close()
+    
+    # Parse the enum string into a list
+    # Convert "('Local News','Politics','Business','Sports','Culture','Opinion')" into a list
+    enum_string = result['enum_values']
+    genres = [genre.strip("'") for genre in enum_string.split(',')]
+    
+    return jsonify(genres)
+
