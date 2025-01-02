@@ -1,3 +1,5 @@
+-- This is a MySQL database
+
 drop database if exists bethesda_matters;
 create database bethesda_matters;
 use bethesda_matters;
