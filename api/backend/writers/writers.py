@@ -50,3 +50,7 @@ def author_indices():
     
     return jsonify(author_list)
 
+@writers.route('/edit-article/<int:article_id>', methods=['GET'])
+def edit_article(article_id):
+    return render_template('edit_article.html', article_id=article_id)
+
