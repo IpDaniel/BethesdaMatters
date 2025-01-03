@@ -22,10 +22,11 @@
     - [ ] Author pages - 5
     - [ ] Properly accredit multiple authors on front end
     - [ ] Make the metadata format properly
-    - [ ] Automate weather
+    - [x] Automate weather
 
 - Both
     - [ ] Sports
     - [ ] Traffic alerts
     - [ ] Weekend events
     - [ ] Make the line spacing work properly even with paragraphs in the same text box
+    - [ ] Change the "news" to "Matters" everywhere it's important

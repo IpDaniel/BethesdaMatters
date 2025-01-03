@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Articles - Bethesda Matters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    <style>
+        .search-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .articles-list {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .article-card {
+            display: flex;
+            margin-bottom: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .article-image {
+            width: 250px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-info {
+            padding: 1rem;
+            flex: 1;
+        }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            color: #000;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta span:not(:last-child)::after {
+            content: '|';
+            margin: 0 0.5rem;
+            color: #ddd;
+        }
+
+        .article-description {
+            color: #444;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="masthead">Bethesda Matters</h1>
+        <p>Your Trusted Source for Local News</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Local News</a></li>
+            <li><a href="#">Politics</a></li>
+            <li><a href="#">Business</a></li>
+            <li><a href="#">Sports</a></li>
+            <li><a href="#">Culture</a></li>
+            <li><a href="#">Opinion</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Search articles...">
+    </div>
+
+    <div class="articles-list">
+        <!-- Example article cards -->
+        <article class="article-card">
+            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
+            <div class="article-info">
+                <h2 class="article-title">Local Restaurant Scene Booming in Downtown Bethesda</h2>
+                <div class="article-meta">
+                    <span>By John Smith</span>
+                    <span>January 15, 2024</span>
+                    <span>5 min read</span>
+                </div>
+                <p class="article-description">New restaurants are opening their doors in downtown Bethesda, bringing diverse cuisines and exciting dining experiences to local residents...</p>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
+            <div class="article-info">
+                <h2 class="article-title">Community Center Renovation Project Nears Completion</h2>
+                <div class="article-meta">
+                    <span>By Sarah Johnson</span>
+                    <span>January 14, 2024</span>
+                    <span>4 min read</span>
+                </div>
+                <p class="article-description">The long-awaited renovation of the Bethesda Community Center is entering its final phase, with new facilities set to open next month...</p>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
+            <div class="article-info">
+                <h2 class="article-title">Local High School Team Advances to State Finals</h2>
+                <div class="article-meta">
+                    <span>By Mike Wilson</span>
+                    <span>January 13, 2024</span>
+                    <span>3 min read</span>
+                </div>
+                <p class="article-description">Bethesda High School's basketball team secured their spot in the state finals after a thrilling victory in last night's semifinal match...</p>
+            </div>
+        </article>
+    </div>
+
+    <!-- Include your existing footer here -->
+</body>
+</html>
