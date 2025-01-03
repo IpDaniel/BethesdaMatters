@@ -1,16 +1,43 @@
+console.log('edit_article.js loaded');
+
 let elementCount = 0;
 let authors = [];
 
 // Load the article data when the page loads
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOMContentLoaded event fired');
     const articleId = document.getElementById('articleId').value;
+    console.log('Article ID:', articleId);
     
-    // Fetch article data
-    fetch(`/articles/edit-article/${articleId}`, {
+    // First fetch authors, then fetch article data
+    fetch('/writers/author_ids', {
         method: 'GET'
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Author response received:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Author data received:', data);
+        authors = data;
+        
+        // Now fetch article data
+        return fetch(`/articles/edit-article/${articleId}`, {
+            method: 'GET'
+        });
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Article data received:', data); // Debug log
+        
         // Populate form fields
         document.getElementById('title').value = data.title;
         document.getElementById('mainImage').value = data.cover_image;
@@ -31,43 +58,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Store the article's current genres for later use
         window.articleGenres = data.genre_tags || [];
+        
+        // Initialize author selects with the current authors
+        initializeAuthorSelects(data.author_ids || []);
+        
+        // Fetch and populate genre options
+        return fetch('/writers/genre-tag-options', {
+            method: 'GET'
+        });
     })
-    .catch(error => {
-        console.error('Error loading article:', error);
-        alert('Error loading article data');
-    });
-    
-    // Fetch authors
-    fetch('/writers/author_ids', {
-        method: 'GET'
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
     })
-    .then(response => response.json())
-    .then(data => {
-        authors = data;
-        initializeAuthorSelects();
-    });
-
-    // Fetch genre options
-    fetch('/writers/genre-tag-options', {
-        method: 'GET'
-    })
-    .then(response => response.json())
     .then(genres => {
+        console.log('Genre data received:', genres); // Debug log
         const genreOptionsContainer = document.querySelector('.genre-options');
+        console.log('Genre container found:', genreOptionsContainer); // Debug log
         genreOptionsContainer.innerHTML = createGenreOptions(genres);
+        console.log('Genre HTML created:', genreOptionsContainer.innerHTML); // Debug log
         
         // Check the genres that were previously selected
         if (window.articleGenres) {
+            console.log('Applying genres:', window.articleGenres); // Debug log
             window.articleGenres.forEach(genre => {
                 const checkbox = document.querySelector(`input[value="${genre}"]`);
                 if (checkbox) {
                     checkbox.checked = true;
+                } else {
+                    console.warn(`No checkbox found for genre: ${genre}`); // Debug log
                 }
             });
         }
     })
     .catch(error => {
-        console.error('Error fetching genre options:', error);
+        console.error('Detailed error:', error); // More detailed error logging
+        alert(`Error loading article data: ${error.message}`);
     });
 });
 
@@ -196,3 +224,123 @@ document.getElementById('articleForm').addEventListener('submit', function(e) {
         alert('Error updating article. Please try again.');
     });
 });
+
+function createAuthorSelect(index, selectedAuthorId = null) {
+    return `
+        <div class="form-group author-select">
+            <label for="author${index}">Author ${index + 1}</label>
+            <select name="authors[${index}]" id="author${index}" required>
+                <option value="">Select an author</option>
+                ${authors.map(author => 
+                    `<option value="${author.id}" ${author.id === selectedAuthorId ? 'selected' : ''}>
+                        ${author.Name}
+                    </option>`
+                ).join('')}
+            </select>
+        </div>
+    `;
+}
+
+function initializeAuthorSelects(selectedAuthorIds = []) {
+    const authorsContainer = document.getElementById('authorSelects');
+    
+    authorsContainer.innerHTML = `
+        <div class="form-group">
+            <label>Article Authors (Select up to 3)</label>
+            <div id="authorSelectsInner">
+                ${selectedAuthorIds.map((authorId, index) => 
+                    createAuthorSelect(index, authorId)
+                ).join('')}
+            </div>
+            <button type="button" class="control-button" onclick="addAuthorSelect()" id="addAuthorBtn">
+                Add Co-Author
+            </button>
+        </div>
+    `;
+
+    // If no authors were selected, add one empty select
+    if (selectedAuthorIds.length === 0) {
+        document.getElementById('authorSelectsInner').innerHTML = createAuthorSelect(0);
+    }
+
+    // Hide the "Add Co-Author" button if we already have 3 authors
+    if (selectedAuthorIds.length >= 3) {
+        document.getElementById('addAuthorBtn').style.display = 'none';
+    }
+
+    setupAuthorSelectionValidation();
+}
+
+// Add this function to handle author selection validation
+function setupAuthorSelectionValidation() {
+    const selects = document.querySelectorAll('[id^="author"]');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            // Reset all options in all selects
+            selects.forEach(otherSelect => {
+                Array.from(otherSelect.options).forEach(option => {
+                    option.disabled = false;
+                });
+            });
+            
+            // Disable selected values in other selects
+            selects.forEach(otherSelect => {
+                if (otherSelect !== this && otherSelect.value) {
+                    const selectedInOther = otherSelect.value;
+                    Array.from(this.options).forEach(option => {
+                        if (option.value === selectedInOther) {
+                            option.disabled = true;
+                        }
+                    });
+                }
+            });
+        });
+    });
+}
+
+function removeElement(button) {
+    button.closest('.element-container').remove();
+    updateOrder();
+}
+
+function moveUp(button) {
+    const container = button.closest('.element-container');
+    const previous = container.previousElementSibling;
+    if (previous) {
+        container.parentNode.insertBefore(container, previous);
+        updateOrder();
+    }
+}
+
+function moveDown(button) {
+    const container = button.closest('.element-container');
+    const next = container.nextElementSibling;
+    if (next) {
+        container.parentNode.insertBefore(next, container);
+        updateOrder();
+    }
+}
+
+function updateOrder() {
+    const elements = document.querySelectorAll('.element-container');
+    elements.forEach((element, index) => {
+        element.querySelector('input[name$="[order]"]').value = index;
+    });
+}
+
+function addAuthorSelect() {
+    const container = document.getElementById('authorSelectsInner');
+    const currentSelects = container.querySelectorAll('.author-select');
+    
+    if (currentSelects.length < 3) {
+        container.insertAdjacentHTML('beforeend', createAuthorSelect(currentSelects.length));
+        
+        if (currentSelects.length + 1 >= 3) {
+            document.getElementById('addAuthorBtn').style.display = 'none';
+        }
+        
+        setupAuthorSelectionValidation();
+    }
+}
