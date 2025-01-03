@@ -3,20 +3,20 @@
 ## Todo
 
 - Producer side
-    - [ ] Add a new article - 1
-        - [ ] Make sure all fields are filled out before submission
-        - [ ] Remove the main article caption field?
-        - [ ] Check the caption functionality for standard images (maybe working already?)
+    - [x] Add a new article - 1
+        - [x] Make sure all fields are filled out before submission
+        - [x] Remove the main article caption field?
+        - [x] Check the caption functionality for standard images (maybe working already?)
         - [x] Make sure the genre tags actually get inserted into the database
-    - [ ] Edit an article - 2
+    - [x] Edit an article - 2
         - [x] Get genre tags from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
         - [x] Get the authors from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
-        - [ ] Add option to remove co-authors
+    - [ ] Add option to remove co-authors
     - [ ] Log in
     - [ ] Log out
 
 - Consumer side
-    - [ ] Captions - 3
+    - [x] Captions - 3
     - [ ] Article search page
     - [ ] Make the reading time dynamically calculated and rendered - 4
     - [ ] Author pages - 5
