@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Populate form fields
         document.getElementById('title').value = data.title;
         document.getElementById('mainImage').value = data.cover_image;
+        document.getElementById('mainImageCaption').value = data.cover_image_caption;
         document.getElementById('summary').value = data.summary;
         
         // Clear existing content elements
@@ -27,13 +28,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 addImageElement(element.url, element.caption);
             }
         });
+
+        // Store the article's current genres for later use
+        window.articleGenres = data.genre_tags || [];
     })
     .catch(error => {
         console.error('Error loading article:', error);
         alert('Error loading article data');
     });
     
-    // Fetch authors (keep the same as article_builder.js)
+    // Fetch authors
     fetch('/writers/author_ids', {
         method: 'GET'
     })
@@ -41,6 +45,29 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         authors = data;
         initializeAuthorSelects();
+    });
+
+    // Fetch genre options
+    fetch('/writers/genre-tag-options', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(genres => {
+        const genreOptionsContainer = document.querySelector('.genre-options');
+        genreOptionsContainer.innerHTML = createGenreOptions(genres);
+        
+        // Check the genres that were previously selected
+        if (window.articleGenres) {
+            window.articleGenres.forEach(genre => {
+                const checkbox = document.querySelector(`input[value="${genre}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching genre options:', error);
     });
 });
 
@@ -79,6 +106,17 @@ function addImageElement(url = '', caption = '') {
     `;
     document.getElementById('articleElements').appendChild(container);
     elementCount++;
+}
+
+// Add this function to create the genre options HTML
+function createGenreOptions(genres) {
+    return genres.map(genre => `
+        <div class="genre-option">
+            <input type="checkbox" id="${genre.toLowerCase().replace(/\s+/g, '')}" 
+                   name="genres" value="${genre}">
+            <label for="${genre.toLowerCase().replace(/\s+/g, '')}">${genre}</label>
+        </div>
+    `).join('');
 }
 
 // Modify the form submit handler

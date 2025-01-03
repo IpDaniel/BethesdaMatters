@@ -268,9 +268,11 @@ def get_article_for_edit(article_id):
             a.image_url,
             a.summary,
             a.created_at,
-            GROUP_CONCAT(DISTINCT aa.author_id) as author_ids
+            GROUP_CONCAT(DISTINCT aa.author_id) as author_ids,
+            GROUP_CONCAT(DISTINCT gt.genre) as genre_tags
         FROM articles a
         LEFT JOIN article_authors aa ON a.id = aa.article_id
+        LEFT JOIN genre_tags gt ON a.id = gt.article_id
         WHERE a.id = %s
         GROUP BY a.id
     """
@@ -312,6 +314,9 @@ def get_article_for_edit(article_id):
     # Format author IDs
     author_ids = [int(aid) for aid in article['author_ids'].split(',')] if article['author_ids'] else []
     
+    # Format genre tags
+    genre_tags = article['genre_tags'].split(',') if article['genre_tags'] else []
+    
     article_data = {
         'id': article['id'],
         'title': article['title'],
@@ -319,6 +324,7 @@ def get_article_for_edit(article_id):
         'summary': article['summary'],
         'date': article['created_at'].strftime("%B %d, %Y"),
         'author_ids': author_ids,
+        'genre_tags': genre_tags,
         'content': content
     }
     
