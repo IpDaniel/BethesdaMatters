@@ -24,8 +24,10 @@
         - [ ] search algorithm?
         - [ ] pagination? / Dynamic loading
         - [ ] Dynamic link access from nav bar
-    - [ ] Make the reading time dynamically calculated and rendered - 4
+    - [ ] Make the reading time dynamically calculated and rendered
     - [ ] Author pages
+        - [ ] Viewing
+        - [ ] Editing?
     - [ ] Properly accredit multiple authors on front end
     - [ ] Make the metadata format properly
     - [x] Automate weather
@@ -34,5 +36,5 @@
     - [ ] Sports
     - [ ] Traffic alerts
     - [ ] Weekend events
-    - [ ] Make the line spacing work properly even with paragraphs in the same text box
+    - [ ] Make the line spacing work properly even with paragraphs in the same text box for articles specifically
     - [ ] Change the "news" to "Matters" everywhere it's important
