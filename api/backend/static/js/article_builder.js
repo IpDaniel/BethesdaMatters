@@ -23,7 +23,7 @@ function addImageElement() {
     container.className = 'element-container';
     container.innerHTML = `
         <input type="url" name="elements[${elementCount}][image_url]" placeholder="Enter image URL" required>
-        <textarea name="elements[${elementCount}][caption]" placeholder="Enter image caption" required></textarea>
+        <textarea name="elements[${elementCount}][caption]" placeholder="Enter image caption"></textarea>
         <input type="hidden" name="elements[${elementCount}][type]" value="image">
         <input type="hidden" name="elements[${elementCount}][order]" value="${elementCount}">
         <div class="element-controls">
@@ -191,24 +191,63 @@ function setupAuthorSelectionValidation() {
 document.getElementById('articleForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Get all form elements
-    const title = document.getElementById('title').value;
-    const coverImage = document.getElementById('mainImage').value;
-    const coverImageCaption = document.getElementById('mainImageCaption').value;
-    const summary = document.getElementById('summary').value;
+    // Validate required fields
+    const title = document.getElementById('title').value.trim();
+    const coverImage = document.getElementById('mainImage').value.trim();
+    const coverImageCaption = document.getElementById('mainImageCaption').value.trim() || '';
+    const summary = document.getElementById('summary').value.trim();
     
-    // Get selected genres
+    // Check basic fields
+    if (!title || !coverImage || !summary) {
+        alert('Please fill in all required fields (Title, Cover Image, and Summary)');
+        return;
+    }
+
+    // Check genres
     const genreCheckboxes = document.querySelectorAll('input[name="genres"]:checked');
     const genres = Array.from(genreCheckboxes).map(cb => cb.value);
     
-    // Get selected authors
+    // Check authors
     const authorSelects = document.querySelectorAll('[id^="author"]');
     const authorIds = Array.from(authorSelects)
         .map(select => parseInt(select.value))
         .filter(id => !isNaN(id));
     
-    // Get content elements
-    const contentElements = Array.from(document.querySelectorAll('.element-container'))
+    if (authorIds.length === 0) {
+        alert('Please select at least one author');
+        return;
+    }
+    
+    // Check content elements
+    const contentElements = document.querySelectorAll('.element-container');
+    if (contentElements.length === 0) {
+        alert('Please add at least one content element (text or image)');
+        return;
+    }
+
+    // Validate each content element
+    let isValid = true;
+    contentElements.forEach(container => {
+        const type = container.querySelector('input[name$="[type]"]').value;
+        if (type === 'text') {
+            const textContent = container.querySelector('textarea').value.trim();
+            if (!textContent) {
+                alert('Please fill in all text content areas');
+                isValid = false;
+            }
+        } else if (type === 'image') {
+            const imageUrl = container.querySelector('input[type="url"]').value.trim();
+            if (!imageUrl) {
+                alert('Please provide URL for all images');
+                isValid = false;
+            }
+        }
+    });
+
+    if (!isValid) return;
+    
+    // If validation passes, create the payload and submit
+    const contentElementsArray = Array.from(contentElements)
         .sort((a, b) => {
             return parseInt(a.querySelector('input[name$="[order]"]').value) - 
                    parseInt(b.querySelector('input[name$="[order]"]').value);
@@ -224,7 +263,7 @@ document.getElementById('articleForm').addEventListener('submit', function(e) {
                 return {
                     type: 'image',
                     url: container.querySelector('input[type="url"]').value,
-                    caption: container.querySelector('textarea').value
+                    caption: container.querySelector('textarea').value.trim() || ''
                 };
             }
         });
@@ -242,7 +281,7 @@ document.getElementById('articleForm').addEventListener('submit', function(e) {
         }),
         genre_tags: genres,
         author_ids: authorIds,
-        content: contentElements
+        content: contentElementsArray
     };
 
     // Send the request

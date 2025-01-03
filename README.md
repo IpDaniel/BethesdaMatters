@@ -7,10 +7,11 @@
         - [ ] Make sure all fields are filled out before submission
         - [ ] Remove the main article caption field?
         - [ ] Check the caption functionality for standard images (maybe working already?)
-        - [ ] Make sure the genre tags actually get inserted into the database
+        - [x] Make sure the genre tags actually get inserted into the database
     - [ ] Edit an article - 2
-        - [ ] Get genre tags from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
-        - [ ] Get the authors from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
+        - [x] Get genre tags from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
+        - [x] Get the authors from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
+        - [ ] Add option to remove co-authors
     - [ ] Log in
     - [ ] Log out
 
@@ -27,3 +28,4 @@
     - [ ] Sports
     - [ ] Traffic alerts
     - [ ] Weekend events
+    - [ ] Make the line spacing work properly even with paragraphs in the same text box
