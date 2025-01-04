@@ -409,3 +409,69 @@ def update_article(article_id):
         'article_id': article_id
     }), 200
 
+@articles.route('/metadata/<article_id>', methods=['GET'])
+def get_article_metadata(article_id):
+    pass
+
+@articles.route('/metadata/search-order', methods=['GET'])
+def get_next_article_metadata():
+    package = {
+        "constraints": {
+            "genre_matches": [
+                "Business",
+                "Sports",
+                "Politics"
+            ],
+            "author_id_matches": [
+                1,
+                2,
+                3
+            ],
+            "text_contains": [
+                "Bethesda",
+                "Maryland",
+                "DC"
+            ]
+        },
+        "prior_priority_score": 10,
+        "number_requested": 3
+    }
+
+    response = {
+        "articles": [
+            {
+                "id": 1,
+                "title": "Bethesda Matters",
+                "authors": [
+                    {
+                        "id": 1,
+                        "name": "John Doe"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Jane Doe"
+                    }
+                ],
+                "published_date": "2024-01-01",
+                "read_time": "5 min read",
+                "summary": "This is a summary of the article",
+                "cover_image": "https://example.com/images/article-cover.jpg"
+            },
+            {
+                "id": 2,
+                "title": "Bethesda Matters",
+                "published_date": "2024-01-01",
+                "authors": [
+                    {
+                        "id": 1,
+                        "name": "Bob Smith"
+                    }
+                ],
+                "read_time": "5 min read",
+                "summary": "This is a summary of the article",
+                "cover_image": "https://example.com/images/article-cover.jpg"
+            }
+        ]
+    }
+
+    return jsonify(response), 200

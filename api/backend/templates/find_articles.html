@@ -76,7 +76,165 @@
             color: #444;
             line-height: 1.5;
         }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 200px;
+        }
     </style>
+    <script>
+        let isLoading = false;
+        let page = 1;
+        
+        function createArticleCard(article) {
+            return `
+                <article class="article-card">
+                    <img src="${article.cover_image}" alt="Article image" class="article-image">
+                    <div class="article-info">
+                        <h2 class="article-title">${article.title}</h2>
+                        <div class="article-meta">
+                            <span>By ${article.authors.map(a => a.name).join(', ')}</span>
+                            <span>${article.published_date}</span>
+                            <span>${article.read_time}</span>
+                        </div>
+                        <p class="article-description">${article.summary}</p>
+                    </div>
+                </article>
+            `;
+        }
+
+        function loadMoreArticles() {
+            if (isLoading) return;
+            
+            isLoading = true;
+            const searchText = document.querySelector('.search-bar').value;
+            const selectedGenres = Array.from(document.querySelector('#genre-select').selectedOptions).map(opt => opt.value);
+            const selectedAuthors = Array.from(document.querySelector('#author-select').selectedOptions).map(opt => parseInt(opt.value));
+            
+            const package = {
+                constraints: {
+                    genre_matches: selectedGenres.length > 0 ? selectedGenres : null,
+                    author_id_matches: selectedAuthors.length > 0 ? selectedAuthors : null,
+                    text_contains: searchText ? searchText.split(' ').filter(word => word.length > 0) : null
+                },
+                prior_priority_score: 10,
+                number_requested: 3,
+                page: page
+            };
+
+            fetch('/articles/metadata/search-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(package)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const articlesList = document.querySelector('.articles-list');
+                data.articles.forEach(article => {
+                    articlesList.insertAdjacentHTML('beforeend', createArticleCard(article));
+                });
+                page++;
+                isLoading = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                isLoading = false;
+            });
+        }
+
+        // Detect when user scrolls near bottom
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+                loadMoreArticles();
+            }
+        });
+
+        // Debounce helper function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Add this function to load initial articles
+        function loadInitialArticles() {
+            document.querySelector('.articles-list').innerHTML = '<div>Loading...</div>';
+            
+            const package = {
+                constraints: {
+                    genre_matches: [],
+                    author_id_matches: [],
+                    text_contains: []
+                },
+                prior_priority_score: 10,
+                number_requested: 10,
+                page: 1
+            };
+
+            // Convert to URL parameters properly
+            const params = new URLSearchParams();
+            params.append('package', JSON.stringify(package));
+
+            fetch(`/articles/metadata/search-order?${params.toString()}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                const articlesList = document.querySelector('.articles-list');
+                articlesList.innerHTML = '';
+                data.articles.forEach(article => {
+                    articlesList.insertAdjacentHTML('beforeend', createArticleCard(article));
+                });
+                page++;
+            })
+            .catch(() => {
+                document.querySelector('.articles-list').innerHTML = '<div>Error loading articles</div>';
+            });
+        }
+
+        // Modify the DOMContentLoaded event listener to ensure it's properly placed
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the page number
+            page = 1;
+            // Load initial articles
+            loadInitialArticles();
+            
+            // Set up event listeners for filters
+            document.querySelector('.search-bar').addEventListener('input', debounce(() => {
+                page = 1;
+                document.querySelector('.articles-list').innerHTML = '';
+                loadMoreArticles();
+            }, 300));
+
+            document.querySelector('#genre-select').addEventListener('change', () => {
+                page = 1;
+                document.querySelector('.articles-list').innerHTML = '';
+                loadMoreArticles();
+            });
+
+            document.querySelector('#author-select').addEventListener('change', () => {
+                page = 1;
+                document.querySelector('.articles-list').innerHTML = '';
+                loadMoreArticles();
+            });
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -98,48 +256,26 @@
 
     <div class="search-container">
         <input type="text" class="search-bar" placeholder="Search articles...">
+        <div class="filter-controls">
+            <select multiple id="genre-select" class="filter-select">
+                <option value="Business">Business</option>
+                <option value="Sports">Sports</option>
+                <option value="Politics">Politics</option>
+                <option value="Culture">Culture</option>
+                <option value="Opinion">Opinion</option>
+            </select>
+            <select multiple id="author-select" class="filter-select">
+                <!-- This should be populated dynamically from your backend -->
+            </select>
+        </div>
     </div>
 
     <div class="articles-list">
-        <!-- Example article cards -->
-        <article class="article-card">
-            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
-            <div class="article-info">
-                <h2 class="article-title">Local Restaurant Scene Booming in Downtown Bethesda</h2>
-                <div class="article-meta">
-                    <span>By John Smith</span>
-                    <span>January 15, 2024</span>
-                    <span>5 min read</span>
-                </div>
-                <p class="article-description">New restaurants are opening their doors in downtown Bethesda, bringing diverse cuisines and exciting dining experiences to local residents...</p>
-            </div>
-        </article>
+        <!-- Remove static article examples -->
+    </div>
 
-        <article class="article-card">
-            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
-            <div class="article-info">
-                <h2 class="article-title">Community Center Renovation Project Nears Completion</h2>
-                <div class="article-meta">
-                    <span>By Sarah Johnson</span>
-                    <span>January 14, 2024</span>
-                    <span>4 min read</span>
-                </div>
-                <p class="article-description">The long-awaited renovation of the Bethesda Community Center is entering its final phase, with new facilities set to open next month...</p>
-            </div>
-        </article>
-
-        <article class="article-card">
-            <img src="https://placehold.co/250x200" alt="Article image" class="article-image">
-            <div class="article-info">
-                <h2 class="article-title">Local High School Team Advances to State Finals</h2>
-                <div class="article-meta">
-                    <span>By Mike Wilson</span>
-                    <span>January 13, 2024</span>
-                    <span>3 min read</span>
-                </div>
-                <p class="article-description">Bethesda High School's basketball team secured their spot in the state finals after a thrilling victory in last night's semifinal match...</p>
-            </div>
-        </article>
+    <div id="loading" style="text-align: center; padding: 2rem; display: none;">
+        Loading more articles...
     </div>
 
     <!-- Include your existing footer here -->
