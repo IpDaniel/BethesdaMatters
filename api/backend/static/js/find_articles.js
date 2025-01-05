@@ -2,20 +2,27 @@ let isLoading = false;
 let page = 1;
 let hasMoreArticles = true;
 
+function getUrlParameter(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+}
+
 function createArticleCard(article) {
     return `
-        <article class="article-card" data-priority-score="${article.priority_score}">
-            <img src="${article.cover_image}" alt="Article image" class="article-image">
-            <div class="article-info">
-                <h2 class="article-title">${article.title}</h2>
-                <div class="article-meta">
-                    <span>By ${article.authors.map(a => a.name).join(', ')}</span>
-                    <span>${article.published_date}</span>
-                    <span>${article.read_time}</span>
+        <a href="/articles/${article.id}" class="article-card-link">
+            <article class="article-card" data-priority-score="${article.priority_score}">
+                <img src="${article.cover_image}" alt="Article image" class="article-image">
+                <div class="article-info">
+                    <h2 class="article-title">${article.title}</h2>
+                    <div class="article-meta">
+                        <span>By ${article.authors.map(a => a.name).join(', ')}</span>
+                        <span>${article.published_date}</span>
+                        <span>${article.read_time}</span>
+                    </div>
+                    <p class="article-description">${article.summary}</p>
                 </div>
-                <p class="article-description">${article.summary}</p>
-            </div>
-        </article>
+            </article>
+        </a>
     `;
 }
 
@@ -193,10 +200,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load authors for the select dropdown
     loadAuthors();
     
-    // Initialize the page number
-    page = 1;
-    // Load initial articles
-    loadInitialArticles();
+    // Check for genre parameter in URL
+    const genreParam = getUrlParameter('genre');
+    if (genreParam) {
+        // Show the filters
+        const filterControls = document.querySelector('.filter-controls');
+        filterControls.style.display = 'block';
+        filterControls.classList.add('visible');
+        
+        // Wait for genres to load, then check the appropriate box
+        setTimeout(() => {
+            const genreCheckboxes = document.querySelectorAll('#genre-checkboxes input[type="checkbox"]');
+            genreCheckboxes.forEach(checkbox => {
+                if (checkbox.value === genreParam) {
+                    checkbox.checked = true;
+                    // Trigger a search with this genre
+                    hasMoreArticles = true;
+                    page = 1;
+                    document.querySelector('.articles-list').innerHTML = '';
+                    loadMoreArticles();
+                }
+            });
+        }, 500); // Give time for genres to load
+    } else {
+        // Initialize the page number and load initial articles
+        page = 1;
+        loadInitialArticles();
+    }
     
     // Add manual search button handler
     document.querySelector('.search-button').addEventListener('click', () => {

@@ -197,3 +197,41 @@
 .filter-controls.visible {
     display: block !important;
 }
+
+.article-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.article-card-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Footer specific overrides */
+body > footer {
+    background-color: #1a1a1a !important;
+    color: white !important;
+}
+
+body > footer .footer-section h4 {
+    color: white !important;
+}
+
+body > footer .footer-section a {
+    color: #ccc !important;
+}
+
+body > footer .footer-section a:hover {
+    color: white !important;
+}
+
+body > footer .social-links a {
+    color: white !important;
+}
+
+body > footer .footer-bottom {
+    color: #ccc !important;
+    border-top: 1px solid #333 !important;
+}

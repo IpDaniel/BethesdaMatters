@@ -594,3 +594,8 @@ def get_next_article_metadata():
     except Exception as e:
         current_app.logger.error(f"Error in get_next_article_metadata: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
+
+@articles.route('/search')
+def search_articles():
+    """Renders the search articles page"""
+    return render_template('find_articles.html')
