@@ -19,14 +19,14 @@
 
 - Consumer side
     - [x] Captions
-    - [7] Article search page
-        - [6] Footer
+    - [x] Article search page
+        - [x] Footer
         - [x] Genre tags
         - [x] Author tags
         - [x] search algorithm?
         - [x] pagination? / Dynamic loading
         - [5] Dynamic link access from nav bar
-        - [ ] Make the article links work
+        - [x] Make the article links work
     - [18] Make the reading time dynamically calculated and rendered
         - [19] might already be like this for the article search page 
     - [14] Author pages
@@ -50,6 +50,7 @@
     - [ ] Search bar works for article content as well as title
     - [ ] increase the articles loaded on page load and per pagination load so it doesnt get stuck with no scrollbar
     - [ ] Add the blue underline to the titles in the article search page
+    - [ ] Make the main image captions not just be the title of the article
 
 8
 13

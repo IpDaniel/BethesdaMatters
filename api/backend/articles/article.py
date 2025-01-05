@@ -445,7 +445,6 @@ def get_all_genres():
     
     return jsonify({'genres': enum_values}), 200
 
-
 @articles.route('/max-priority-score', methods=['GET'])
 def get_max_priority_score():
     query = """

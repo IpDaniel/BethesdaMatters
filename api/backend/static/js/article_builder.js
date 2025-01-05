@@ -80,7 +80,7 @@ function createGenreOptions(genres) {
 // Add this to your existing page load fetch operations
 document.addEventListener('DOMContentLoaded', function() {
     // Existing authors fetch
-    fetch('/writers/author_ids', {
+    fetch('/writers/author-ids', {
         method: 'GET'
     })
     .then(response => response.json())
@@ -113,6 +113,7 @@ function createAuthorSelect(index) {
                     `<option value="${author.id}">${author.Name}</option>`
                 ).join('')}
             </select>
+            ${index > 0 ? `<button type="button" class="control-button" onclick="removeAuthorSelect(this)">Remove</button>` : ''}
         </div>
     `;
 }
@@ -186,6 +187,25 @@ function setupAuthorSelectionValidation() {
             });
         });
     });
+}
+
+function removeAuthorSelect(button) {
+    const container = button.closest('.author-select');
+    container.remove();
+    
+    // Show the "Add Co-Author" button if we're below 3 authors
+    const currentSelects = document.querySelectorAll('.author-select');
+    if (currentSelects.length < 3) {
+        document.getElementById('addAuthorBtn').style.display = '';
+    }
+    
+    // Update the remaining author labels
+    currentSelects.forEach((select, index) => {
+        select.querySelector('label').textContent = `Author ${index + 1}`;
+    });
+    
+    // Rerun validation to update disabled options
+    setupAuthorSelectionValidation();
 }
 
 document.getElementById('articleForm').addEventListener('submit', function(e) {
