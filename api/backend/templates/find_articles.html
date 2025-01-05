@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/find_articles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -29,9 +30,15 @@
     <div class="search-container">
         <div class="search-bar-container">
             <input type="text" class="search-bar" placeholder="Search articles...">
-            <button class="search-button">Search</button>
+            <button class="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+            <button class="filters-toggle">
+                <i class="fas fa-filter"></i>
+                Filters
+            </button>
         </div>
-        <div class="filter-controls">
+        <div class="filter-controls" style="display: none;">
             <div class="filter-section">
                 <h3>Genres</h3>
                 <div id="genre-checkboxes" class="checkbox-group">

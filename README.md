@@ -45,6 +45,10 @@
     - [x] Change the "news" to "Matters" everywhere it's important
 
 
+- Small fixes at the end
+    - [ ] Search bar works for article content as well as title
+    - [ ] increase the articles loaded on page load and per pagination load so it doesnt get stuck with no scrollbar
+
 8
 13
 17

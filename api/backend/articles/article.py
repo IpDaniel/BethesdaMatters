@@ -459,6 +459,7 @@ def get_max_priority_score():
 
 @articles.route('/metadata/search-order', methods=['GET'])
 def get_next_article_metadata():
+    print("get_next_article_metadata called")
     try:
         # Get and parse the package from URL parameters
         package_str = request.args.get('package')
@@ -508,14 +509,29 @@ def get_next_article_metadata():
             params.extend(constraints['genre_matches'])
 
         if constraints.get('text_contains'):
-            text_conditions = []
+            # # Add print debugging
+            # print(f"Search terms: {constraints['text_contains']}")
+            
+            term_groups = []
             for term in constraints['text_contains']:
-                text_conditions.append("""
-                    (a.title LIKE %s OR a.content LIKE %s OR a.summary LIKE %s)
-                """)
+                term_conditions = """
+                    (LOWER(a.title) LIKE LOWER(%s) 
+                    OR LOWER(a.content) LIKE LOWER(%s) 
+                    OR LOWER(a.summary) LIKE LOWER(%s))
+                """
                 search_term = f"%{term}%"
                 params.extend([search_term, search_term, search_term])
-            where_conditions.append('(' + ' OR '.join(text_conditions) + ')')
+                term_groups.append(term_conditions)
+                
+                # # Add print debugging for the constructed SQL
+                # print(f"Search term: {search_term}")
+                # print(f"SQL condition: {term_conditions}")
+            
+            where_clause = '(' + ' AND '.join(term_groups) + ')'
+            where_conditions.append(where_clause)
+            
+            # # Print the final where clause
+            # print(f"Final where clause: {where_clause}")
 
         # Add WHERE clause
         if where_conditions:

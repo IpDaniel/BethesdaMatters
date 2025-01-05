@@ -229,4 +229,17 @@ document.addEventListener('DOMContentLoaded', () => {
     //     document.querySelector('.articles-list').innerHTML = '';
     //     loadMoreArticles();
     // });
+
+    // Add filter toggle functionality
+    const filtersToggle = document.querySelector('.filters-toggle');
+    const filterControls = document.querySelector('.filter-controls');
+    
+    filtersToggle.addEventListener('click', () => {
+        filterControls.classList.toggle('visible');
+        if (filterControls.classList.contains('visible')) {
+            filterControls.style.display = 'block';
+        } else {
+            filterControls.style.display = 'none';
+        }
+    });
 });
