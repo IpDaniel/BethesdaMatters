@@ -490,8 +490,8 @@ def get_next_article_metadata():
             query += " WHERE " + " AND ".join(where_conditions)
 
         # Add ordering and limit
-        query += " ORDER BY a.priority_score DESC LIMIT %s OFFSET %s"
-        params.extend([limit, offset])
+        query += " ORDER BY a.priority_score DESC, a.id DESC LIMIT %s"
+        params.append(limit)
 
         # Execute main query
         connection = db.get_db()
@@ -501,7 +501,11 @@ def get_next_article_metadata():
 
         # Return empty list if no articles found
         if not articles:
-            return jsonify({'articles': [], 'message': 'No more articles found'}), 200
+            return jsonify({
+                'articles': [],
+                'has_more': False,
+                'message': 'No more articles available'
+            }), 200
 
         # For each article, fetch its authors
         result_articles = []
@@ -528,10 +532,14 @@ def get_next_article_metadata():
                 'published_date': article['published_date'].strftime("%B %d, %Y"),
                 'read_time': f"{read_time} min read",
                 'summary': article['summary'],
-                'cover_image': article['cover_image']
+                'cover_image': article['cover_image'],
+                'priority_score': float(article['priority_score'])
             })
 
-        return jsonify({'articles': result_articles}), 200
+        return jsonify({
+            'articles': result_articles,
+            'has_more': True
+        }), 200
 
     except json.JSONDecodeError:
         return jsonify({'error': 'Invalid package format'}), 400
