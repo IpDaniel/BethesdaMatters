@@ -414,6 +414,38 @@ def update_article(article_id):
 def get_article_metadata(article_id):
     pass
 
+@articles.route('/all-genres', methods=['GET'])
+def get_all_genres():
+    # Get the enum values directly from information_schema
+    """Returned json looks like:
+    {
+    "genres": [
+        "Local News",
+        "Politics",
+        "Business",
+        "Sports",
+        "Culture",
+        "Opinion"
+       ]
+    }"""
+    query = """
+        SELECT COLUMN_TYPE 
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = 'bethesda_matters'
+        AND TABLE_NAME = 'genre_tags' 
+        AND COLUMN_NAME = 'genre'
+    """
+    connection = db.get_db()
+    cursor = connection.cursor()
+    cursor.execute(query)
+    enum_def = cursor.fetchone()['COLUMN_TYPE']
+    
+    # Parse the enum values from the string like "enum('Local News','Politics',...)"
+    enum_values = enum_def.replace('enum(', '').replace(')', '').replace("'", '').split(',')
+    
+    return jsonify({'genres': enum_values}), 200
+
+
 @articles.route('/max-priority-score', methods=['GET'])
 def get_max_priority_score():
     query = """
@@ -458,32 +490,32 @@ def get_next_article_metadata():
         where_conditions = ["a.priority_score < %s"]
         params.append(prior_score)
 
-        if constraints.get('genre_matches'):
-            # For each genre, ensure the article has that genre tag
-            for genre in constraints['genre_matches']:
-                query += f"""
-                    JOIN genre_tags gt_{genre} ON a.id = gt_{genre}.article_id 
-                    AND gt_{genre}.genre = %s
-                """
-                params.append(genre)
-
+        # Add author filter if present
         if constraints.get('author_id_matches'):
-            # For each author, ensure the article has that author
-            for author_id in constraints['author_id_matches']:
-                query += f"""
-                    JOIN article_authors aa_{author_id} ON a.id = aa_{author_id}.article_id 
-                    AND aa_{author_id}.author_id = %s
-                """
-                params.append(author_id)
+            query += """
+                JOIN article_authors aa ON a.id = aa.article_id
+            """
+            where_conditions.append("aa.author_id IN (%s)" % 
+                ','.join(['%s'] * len(constraints['author_id_matches'])))
+            params.extend(constraints['author_id_matches'])
+
+        if constraints.get('genre_matches'):
+            query += """
+                JOIN genre_tags gt ON a.id = gt.article_id
+            """
+            where_conditions.append("gt.genre IN (%s)" % 
+                ','.join(['%s'] * len(constraints['genre_matches'])))
+            params.extend(constraints['genre_matches'])
 
         if constraints.get('text_contains'):
-            # Each search term must be found in at least one of title, content, or summary
+            text_conditions = []
             for term in constraints['text_contains']:
-                where_conditions.append("""
+                text_conditions.append("""
                     (a.title LIKE %s OR a.content LIKE %s OR a.summary LIKE %s)
                 """)
                 search_term = f"%{term}%"
                 params.extend([search_term, search_term, search_term])
+            where_conditions.append('(' + ' OR '.join(text_conditions) + ')')
 
         # Add WHERE clause
         if where_conditions:

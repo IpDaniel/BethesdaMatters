@@ -8,12 +8,12 @@ from backend.db_connection import db
 
 writers = Blueprint('writers', __name__)
 
-@writers.route('/write_article')
+@writers.route('/write-article')
 def writers_page():
     return render_template('write_article.html')
 
-@writers.route('/author_ids', methods=['GET'])
-def author_indices():
+@writers.route('/author-ids', methods=['GET'])
+def author_ids():
     """Route to get all authors and their ids. 
     Returns a list of dictionaries with the following structure:
     [

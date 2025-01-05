@@ -24,8 +24,8 @@ function loadMoreArticles() {
     
     isLoading = true;
     const searchText = document.querySelector('.search-bar').value;
-    const selectedGenres = Array.from(document.querySelector('#genre-select').selectedOptions).map(opt => opt.value);
-    const selectedAuthors = Array.from(document.querySelector('#author-select').selectedOptions).map(opt => parseInt(opt.value));
+    const selectedGenres = Array.from(document.querySelectorAll('#genre-checkboxes input:checked')).map(cb => cb.value);
+    const selectedAuthors = Array.from(document.querySelectorAll('#author-checkboxes input:checked')).map(cb => parseInt(cb.value));
     
     // Get the lowest priority score from all loaded articles
     const allArticles = document.querySelectorAll('.article-card');
@@ -138,32 +138,95 @@ function loadInitialArticles() {
     });
 }
 
-// Modify the DOMContentLoaded event listener to ensure it's properly placed
+function loadAuthors() {
+    fetch('/writers/author-ids', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(authors => {
+        const authorCheckboxes = document.querySelector('#author-checkboxes');
+        authorCheckboxes.innerHTML = ''; // Clear existing checkboxes
+        authors.forEach(author => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = author.id;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(author.Name));
+            authorCheckboxes.appendChild(label);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading authors:', error);
+    });
+}
+
+// Add this new function to load genres
+function loadGenres() {
+    fetch('/articles/all-genres', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        const genreCheckboxes = document.querySelector('#genre-checkboxes');
+        genreCheckboxes.innerHTML = ''; // Clear existing checkboxes
+        data.genres.forEach(genre => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = genre;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(genre));
+            genreCheckboxes.appendChild(label);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading genres:', error);
+    });
+}
+
+// Modify the DOMContentLoaded event listener to include genre loading
 document.addEventListener('DOMContentLoaded', () => {
+    // Load genres for the checkboxes
+    loadGenres();
+    
+    // Load authors for the select dropdown
+    loadAuthors();
+    
     // Initialize the page number
     page = 1;
     // Load initial articles
     loadInitialArticles();
     
-    // Set up event listeners for filters
-    document.querySelector('.search-bar').addEventListener('input', debounce(() => {
-        hasMoreArticles = true;
-        page = 1;
-        document.querySelector('.articles-list').innerHTML = '';
-        loadMoreArticles();
-    }, 300));
-
-    document.querySelector('#genre-select').addEventListener('change', () => {
+    // Add manual search button handler
+    document.querySelector('.search-button').addEventListener('click', () => {
         hasMoreArticles = true;
         page = 1;
         document.querySelector('.articles-list').innerHTML = '';
         loadMoreArticles();
     });
+    
+    // Existing event listeners that you may want to comment out later
+    // document.querySelector('.search-bar').addEventListener('input', debounce(() => {
+    //     hasMoreArticles = true;
+    //     page = 1;
+    //     document.querySelector('.articles-list').innerHTML = '';
+    //     loadMoreArticles();
+    // }, 300));
 
-    document.querySelector('#author-select').addEventListener('change', () => {
-        hasMoreArticles = true;
-        page = 1;
-        document.querySelector('.articles-list').innerHTML = '';
-        loadMoreArticles();
-    });
+    // // Update genre checkbox event listeners
+    // document.querySelector('#genre-checkboxes').addEventListener('change', () => {
+    //     hasMoreArticles = true;
+    //     page = 1;
+    //     document.querySelector('.articles-list').innerHTML = '';
+    //     loadMoreArticles();
+    // });
+
+    // // Update author checkbox event listeners
+    // document.querySelector('#author-checkboxes').addEventListener('change', () => {
+    //     hasMoreArticles = true;
+    //     page = 1;
+    //     document.querySelector('.articles-list').innerHTML = '';
+    //     loadMoreArticles();
+    // });
 });
