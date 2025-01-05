@@ -7,6 +7,7 @@ from flask import render_template
 from backend.db_connection import db
 from backend.articles.article_helpers import text_content_crop, get_featured_articles
 from datetime import datetime
+import json
 
 articles = Blueprint('articles', __name__)
 
@@ -413,65 +414,127 @@ def update_article(article_id):
 def get_article_metadata(article_id):
     pass
 
+@articles.route('/max-priority-score', methods=['GET'])
+def get_max_priority_score():
+    query = """
+        SELECT MAX(priority_score) FROM articles
+    """
+    connection = db.get_db()
+    cursor = connection.cursor()
+    cursor.execute(query)
+    max_priority_score = cursor.fetchone()[0]
+    return jsonify({'max_priority_score': max_priority_score}), 200
+
 @articles.route('/metadata/search-order', methods=['GET'])
 def get_next_article_metadata():
-    package = {
-        "constraints": {
-            "genre_matches": [
-                "Business",
-                "Sports",
-                "Politics"
-            ],
-            "author_id_matches": [
-                1,
-                2,
-                3
-            ],
-            "text_contains": [
-                "Bethesda",
-                "Maryland",
-                "DC"
-            ]
-        },
-        "prior_priority_score": 10,
-        "number_requested": 3
-    }
+    try:
+        # Get and parse the package from URL parameters
+        package_str = request.args.get('package')
+        if not package_str:
+            return jsonify({'error': 'No search package provided'}), 400
+        
+        package = json.loads(package_str)
+        constraints = package.get('constraints', {})
+        prior_score = package.get('prior_priority_score', float('inf'))
+        limit = package.get('number_requested', 10)
+        page = package.get('page', 1)
+        offset = (page - 1) * limit
 
-    response = {
-        "articles": [
-            {
-                "id": 1,
-                "title": "Bethesda Matters",
-                "authors": [
-                    {
-                        "id": 1,
-                        "name": "John Doe"
-                    },
-                    {
-                        "id": 2,
-                        "name": "Jane Doe"
-                    }
-                ],
-                "published_date": "2024-01-01",
-                "read_time": "5 min read",
-                "summary": "This is a summary of the article",
-                "cover_image": "https://example.com/images/article-cover.jpg"
-            },
-            {
-                "id": 2,
-                "title": "Bethesda Matters",
-                "published_date": "2024-01-01",
-                "authors": [
-                    {
-                        "id": 1,
-                        "name": "Bob Smith"
-                    }
-                ],
-                "read_time": "5 min read",
-                "summary": "This is a summary of the article",
-                "cover_image": "https://example.com/images/article-cover.jpg"
-            }
-        ]
-    }
+        # Build the base query
+        query = """
+            SELECT DISTINCT
+                a.id,
+                a.title,
+                a.image_url as cover_image,
+                a.summary,
+                a.content,
+                a.created_at as published_date,
+                a.priority_score
+            FROM articles a
+        """
+        params = []
 
-    return jsonify(response), 200
+        # Handle multiple constraints with AND logic
+        where_conditions = ["a.priority_score < %s"]
+        params.append(prior_score)
+
+        if constraints.get('genre_matches'):
+            # For each genre, ensure the article has that genre tag
+            for genre in constraints['genre_matches']:
+                query += f"""
+                    JOIN genre_tags gt_{genre} ON a.id = gt_{genre}.article_id 
+                    AND gt_{genre}.genre = %s
+                """
+                params.append(genre)
+
+        if constraints.get('author_id_matches'):
+            # For each author, ensure the article has that author
+            for author_id in constraints['author_id_matches']:
+                query += f"""
+                    JOIN article_authors aa_{author_id} ON a.id = aa_{author_id}.article_id 
+                    AND aa_{author_id}.author_id = %s
+                """
+                params.append(author_id)
+
+        if constraints.get('text_contains'):
+            # Each search term must be found in at least one of title, content, or summary
+            for term in constraints['text_contains']:
+                where_conditions.append("""
+                    (a.title LIKE %s OR a.content LIKE %s OR a.summary LIKE %s)
+                """)
+                search_term = f"%{term}%"
+                params.extend([search_term, search_term, search_term])
+
+        # Add WHERE clause
+        if where_conditions:
+            query += " WHERE " + " AND ".join(where_conditions)
+
+        # Add ordering and limit
+        query += " ORDER BY a.priority_score DESC LIMIT %s OFFSET %s"
+        params.extend([limit, offset])
+
+        # Execute main query
+        connection = db.get_db()
+        cursor = connection.cursor()
+        cursor.execute(query, params)
+        articles = cursor.fetchall()
+
+        # Return empty list if no articles found
+        if not articles:
+            return jsonify({'articles': [], 'message': 'No more articles found'}), 200
+
+        # For each article, fetch its authors
+        result_articles = []
+        for article in articles:
+            # Fetch authors for this article
+            author_query = """
+                SELECT auth.id, CONCAT(auth.first_name, ' ', auth.last_name) as name
+                FROM article_authors aa
+                JOIN authors auth ON aa.author_id = auth.id
+                WHERE aa.article_id = %s
+            """
+            cursor.execute(author_query, (article['id'],))
+            authors = cursor.fetchall()
+
+            # Calculate read time (based on word count)
+            # Assuming average reading speed of 200 words per minute
+            word_count = len(article['content'].split())
+            read_time = max(1, round(word_count / 200))
+
+            result_articles.append({
+                'id': article['id'],
+                'title': article['title'],
+                'authors': authors,
+                'published_date': article['published_date'].strftime("%B %d, %Y"),
+                'read_time': f"{read_time} min read",
+                'summary': article['summary'],
+                'cover_image': article['cover_image']
+            })
+
+        return jsonify({'articles': result_articles}), 200
+
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid package format'}), 400
+    except Exception as e:
+        current_app.logger.error(f"Error in get_next_article_metadata: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500

@@ -125,13 +125,13 @@
                     author_id_matches: selectedAuthors.length > 0 ? selectedAuthors : null,
                     text_contains: searchText ? searchText.split(' ').filter(word => word.length > 0) : null
                 },
-                prior_priority_score: 10,
+                prior_priority_score: 100,
                 number_requested: 3,
                 page: page
             };
 
             fetch('/articles/metadata/search-order', {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -182,7 +182,7 @@
                     author_id_matches: [],
                     text_contains: []
                 },
-                prior_priority_score: 10,
+                prior_priority_score: 100,
                 number_requested: 10,
                 page: 1
             };
