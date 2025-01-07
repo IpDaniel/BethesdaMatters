@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sidebar Widgets - Bethesda Matters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar_widget_edit.css') }}">
+</head>
+<body>
+    <header>
+        <h1 class="masthead">Bethesda Matters</h1>
+        <p>Sidebar Widget Editor</p>
+    </header>
+
+    <main class="widget-editor">
+        <div class="widget-list">
+            <!-- Example hardcoded widgets -->
+            <div class="widget-card" data-id="1">
+                <div class="widget-content">
+                    <h3>Traffic Alert</h3>
+                    <p>Road Work on Wisconsin Ave. Expect 15-minute delays between 9AM-3PM</p>
+                </div>
+                <div class="widget-edit-form hidden">
+                    <input type="text" class="widget-title-input" value="Traffic Alert">
+                    <textarea class="widget-content-input">Road Work on Wisconsin Ave. Expect 15-minute delays between 9AM-3PM</textarea>
+                    <div class="edit-buttons">
+                        <button class="save-btn">Save</button>
+                        <button class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+                <button class="edit-btn">Edit</button>
+            </div>
+
+            <div class="widget-card" data-id="2">
+                <div class="widget-content">
+                    <h3>Weekend Events</h3>
+                    <p>Farmers Market & Art Festival. Saturday & Sunday, 10AM-4PM</p>
+                </div>
+                <div class="widget-edit-form hidden">
+                    <input type="text" class="widget-title-input" value="Weekend Events">
+                    <textarea class="widget-content-input">Farmers Market & Art Festival. Saturday & Sunday, 10AM-4PM</textarea>
+                    <div class="edit-buttons">
+                        <button class="save-btn">Save</button>
+                        <button class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+                <button class="edit-btn">Edit</button>
+            </div>
+
+            <div class="widget-card" data-id="3">
+                <div class="widget-content">
+                    <h3>Local Sports</h3>
+                    <p>Bethesda Bulls: 24 - Ravens: 21. High School Championship this Friday</p>
+                </div>
+                <div class="widget-edit-form hidden">
+                    <input type="text" class="widget-title-input" value="Local Sports">
+                    <textarea class="widget-content-input">Bethesda Bulls: 24 - Ravens: 21. High School Championship this Friday</textarea>
+                    <div class="edit-buttons">
+                        <button class="save-btn">Save</button>
+                        <button class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+                <button class="edit-btn">Edit</button>
+            </div>
+        </div>
+
+        <button id="add-widget-btn">Add New Widget</button>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/sidebar_widget_edit.js') }}"></script>
+</body>
+</html>

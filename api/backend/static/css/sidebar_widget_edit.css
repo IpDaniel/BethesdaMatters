@@ -1,0 +1,110 @@
+.widget-editor {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.widget-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.widget-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.widget-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.widget-content p {
+    margin: 0;
+    color: #666;
+}
+
+.widget-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.widget-edit-form.hidden {
+    display: none;
+}
+
+.widget-title-input {
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.widget-content-input {
+    padding: 0.5rem;
+    min-height: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.edit-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.save-btn, .cancel-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #1a1a1a;
+    color: white;
+    border: none;
+}
+
+.cancel-btn {
+    background: white;
+    border: 1px solid #ddd;
+}
+
+#add-widget-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.edit-btn:hover, .save-btn:hover, #add-widget-btn:hover {
+    background: #333;
+}
+
+.cancel-btn:hover {
+    background: #f5f5f5;
+}

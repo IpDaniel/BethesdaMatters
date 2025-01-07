@@ -8,6 +8,7 @@ from backend.articles.article import articles
 from backend.writers.writers import writers
 from backend.services.weather import weather
 from backend.auth.routes import auth
+from backend.sidebar.sidebar_routes import sidebar
 from backend.auth.models import User
 
 import os
@@ -80,6 +81,7 @@ def create_app():
     app.register_blueprint(writers,  url_prefix='/writers')
     app.register_blueprint(weather,  url_prefix='/weather')
     app.register_blueprint(auth,  url_prefix='/auth')
+    app.register_blueprint(sidebar,  url_prefix='/sidebar')
 
     # Don't forget to return the app object
     return app

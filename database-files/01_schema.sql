@@ -58,6 +58,15 @@ create table genre_tags (
     foreign key (article_id) references articles(id)
 );
 
+create table sidebar_widgets (
+    id int primary key auto_increment,
+    widget_type enum('traffic', 'events', 'sports') not null,
+    title varchar(255) not null,
+    content text not null,
+    updated_at datetime default current_timestamp on update current_timestamp,
+    created_at datetime default current_timestamp
+);
+
 -- Add this at the end to verify all tables were created
 SELECT 'Schema created successfully' as message;
 

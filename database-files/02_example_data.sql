@@ -338,8 +338,33 @@ SELECT id, 'bob.smith@bethesdamatters.com',
 FROM authors
 WHERE first_name = 'Bob' AND last_name = 'Smith';
 
+-- Add initial sidebar widgets
+-- ----------------------------------------------
 
-SELECT password_hash as message FROM employee_accounts LIMIT 1;
+-- Traffic Widget
+INSERT INTO sidebar_widgets (widget_type, title, content) VALUES (
+    'traffic',
+    'Current Traffic Conditions',
+    'Heavy delays on I-495 Beltway near Connecticut Ave exit. Wisconsin Ave moving slowly between Bradley Blvd and Old Georgetown Rd. Construction on Old Georgetown Road between Democracy Blvd and Cedar Ln.'
+);
+
+-- Events Widget
+INSERT INTO sidebar_widgets (widget_type, title, content) VALUES (
+    'events',
+    'Upcoming Local Events',
+    'Bethesda Art Walk - April 15 at Downtown Bethesda
+    Farmers Market - April 20 at Elm Street Park
+    Community Jazz Festival - April 27 at Veteran''s Park'
+);
+
+-- Sports Widget
+INSERT INTO sidebar_widgets (widget_type, title, content) VALUES (
+    'sports',
+    'Local Sports Update',
+    'Bethesda Big Train defeats Rockville Express 6-2
+    BCC Barons win 28-14 against Churchill Bulldogs
+    Whitman Vikings face Walter Johnson this Friday'
+);
 
 SELECT 'Example data script completed successfully' as message;
 

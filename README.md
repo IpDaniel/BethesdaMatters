@@ -16,7 +16,7 @@
     - [17] Priority setting for the editors
     - [x] Log in
         - [ ] add the credentials: include line to necessary fetch calls on front end 
-    - [10] Log out
+    - [x] Log out
 
 - Consumer side
     - [x] Captions
@@ -42,6 +42,7 @@
     - [11] Sports
     - [12] Traffic alerts
     - [13] Weekend events
+        - [ ] Remember to make login required to edit the sidebar widgets
     - [22] Make the line spacing work properly even with paragraphs in the same text box for articles specifically
     - [23] Newsletter
     - [x] Change the "news" to "Matters" everywhere it's important
