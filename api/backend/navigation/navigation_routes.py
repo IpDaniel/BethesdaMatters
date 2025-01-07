@@ -21,3 +21,7 @@ def get_find_articles():
 def get_login():
     return render_template('login.html')
 
+@navigation.route('/employees', methods=['GET'])
+def get_employees():
+    return render_template('manage_articles.html')
+
