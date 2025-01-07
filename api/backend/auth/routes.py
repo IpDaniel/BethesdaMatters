@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from ..db_connection import db
 from .models import User
 from urllib.parse import urlparse, urljoin
@@ -33,16 +33,18 @@ def login():
         user = User(
             id=user_data['id'],
             email=user_data['email'],
-            role=user_data['role']
+            role=user_data['primary_role']
         )
-        login_user(user)
+        # Get remember me value from form
+        remember = data.get('remember', False)
+        login_user(user, remember=remember)  # This will extend the session if remember=True
         
         # Get the next page from form data or args
         next_page = request.form.get('next') or request.args.get('next')
         
         # Validate the next URL to prevent redirect attacks
         if not next_page or not is_safe_url(next_page):
-            next_page = url_for('main.index')  # Replace with your default route
+            next_page = url_for('articles.search_articles')  # Using the function name from your route
             
         return redirect(next_page)
     
@@ -56,4 +58,10 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return jsonify({'message': 'Logged out successfully'})
+    return redirect(url_for('auth.login'))
+
+@auth.route('/get-password-hash', methods=['GET'])
+def get_password_hash():
+    password = 'password123'
+    hashed = generate_password_hash(password)
+    return jsonify({'hashed_password': hashed})

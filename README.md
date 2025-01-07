@@ -14,7 +14,7 @@
     - [x] Add option to remove co-authors
         - [x] in both the article write and edit pages
     - [17] Priority setting for the editors
-    - [9] Log in
+    - [x] Log in
         - [ ] add the credentials: include line to necessary fetch calls on front end 
     - [10] Log out
 
@@ -52,8 +52,9 @@
     - [ ] increase the articles loaded on page load and per pagination load so it doesnt get stuck with no scrollbar
     - [ ] Add the blue underline to the titles in the article search page
     - [ ] Make the main image captions not just be the title of the article
+    - [ ] Stick a logout button on there somewhere
 
-Routes I added the loging_required decorator to:
+Routes I added the login_required decorator to:
 - /write-article
 - /edit-article/<int:article_id>
 - /write-article

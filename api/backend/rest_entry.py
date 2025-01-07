@@ -12,6 +12,7 @@ from backend.auth.models import User
 
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 def create_app():
     app = Flask(__name__)
@@ -28,6 +29,15 @@ def create_app():
     # extensions or your application
     # app.config['SECRET_KEY'] = 'someCrazyS3cR3T!Key.!'
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+    # Add these new session duration settings
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)  # How long sessions last - Make this 2 hours in practice
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=30)    # How long "remember me" lasts - Make this 1 day in practice
+    """
+    The idea here is that if someone logs in with the remember me option,
+    they will be logged in for 1 day And they can close the tab and it wont log them out. 
+    If they don't use the remember me option, they will be logged in for 2 hours no matter what.
+    """
 
     # # these are for the DB object to be able to connect to MySQL. 
     # app.config['MYSQL_DATABASE_USER'] = 'root'
@@ -57,7 +67,7 @@ def create_app():
             return User(
                 id=user_data['id'],
                 email=user_data['email'],
-                role=user_data['role']
+                role=user_data['primary_role']
             )
         return None
 

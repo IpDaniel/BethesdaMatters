@@ -278,6 +278,69 @@ INSERT INTO article_authors (article_id, author_id) VALUES
 INSERT INTO genre_tags (article_id, genre) VALUES
 (@article_id, 'Local News');
 
+-- Add employee accounts for existing authors
+-- Note: In a real system, passwords would never be this simple!
+-- Using 'password123' for all accounts, hashed appropriately for Flask's werkzeug.security
+
+-- Sarah Johnson (Local News Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role) 
+SELECT id, 'sarah.johnson@bethesdamatters.com', 
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors 
+WHERE first_name = 'Sarah' AND last_name = 'Johnson';
+
+-- Michael Chen (Urban Development Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'michael.chen@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'Michael' AND last_name = 'Chen';
+
+-- Emily Rodriguez (Food Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'emily.rodriguez@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'Emily' AND last_name = 'Rodriguez';
+
+-- David Park (Tech Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'david.park@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'David' AND last_name = 'Park';
+
+-- Lisa Martinez (Culture Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'lisa.martinez@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'Lisa' AND last_name = 'Martinez';
+
+-- James Wilson (Education Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'james.wilson@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'James' AND last_name = 'Wilson';
+
+-- Bob Smith (Education Reporter)
+INSERT INTO employee_accounts (author_id, email, password_hash, primary_role)
+SELECT id, 'bob.smith@bethesdamatters.com',
+       'pbkdf2:sha256:600000$uIqjVyAQ78eY83Ya$222b7649932b337217ae496df6031aab9279232bbd60188e513bdc9ff88a52b4',
+       'writer'
+FROM authors
+WHERE first_name = 'Bob' AND last_name = 'Smith';
+
+
+SELECT password_hash as message FROM employee_accounts LIMIT 1;
+
 SELECT 'Example data script completed successfully' as message;
 
 
