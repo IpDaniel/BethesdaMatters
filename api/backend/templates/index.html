@@ -126,9 +126,10 @@
             <div id="dynamic-sidebar-widgets"></div>
 
             <h3>Subscribe to Our Newsletter</h3>
-            <form>
-                <input type="email" placeholder="Enter your email" style="width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <form id="newsletter-form" onsubmit="return handleNewsletterSubmit(event)">
+                <input type="email" id="newsletter-email" placeholder="Enter your email" style="width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                 <button type="submit" style="width: 100%; padding: 8px; background-color: #1a1a1a; color: white; border: none; border-radius: 4px; cursor: pointer;">Subscribe</button>
+                <p id="newsletter-message" style="margin-top: 10px; text-align: center; display: none;"></p>
             </form>
         </aside>
     </div>

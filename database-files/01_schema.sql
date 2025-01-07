@@ -67,6 +67,15 @@ create table sidebar_widgets (
     created_at datetime default current_timestamp
 );
 
+create table newsletter_subscribers (
+    id int primary key auto_increment,
+    email varchar(255) unique not null,
+    unsubscribe_token varchar(64) unique not null,  -- Used for one-click unsubscribe
+    last_email_sent datetime,                       -- Track when we last sent them an email
+    created_at datetime default current_timestamp not null,
+    updated_at datetime default current_timestamp on update current_timestamp
+);
+
 -- Add this at the end to verify all tables were created
 SELECT 'Schema created successfully' as message;
 

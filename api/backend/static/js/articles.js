@@ -64,5 +64,57 @@ async function loadArticles() {
     }
 }
 
+async function handleNewsletterSubmit(event) {
+    event.preventDefault();
+    
+    const emailInput = document.getElementById('newsletter-email');
+    const messageElement = document.getElementById('newsletter-message');
+    const submitButton = event.target.querySelector('button');
+    
+    // Basic validation
+    if (!emailInput.value) {
+        showNewsletterMessage('Please enter an email address', 'error');
+        return false;
+    }
+
+    try {
+        submitButton.disabled = true;
+        const response = await fetch('/newsletter/add-recipient-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: emailInput.value })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showNewsletterMessage('Thank you for subscribing!', 'success');
+            emailInput.value = ''; // Clear the input
+        } else {
+            showNewsletterMessage(data.error || 'Failed to subscribe. Please try again.', 'error');
+        }
+    } catch (error) {
+        showNewsletterMessage('An error occurred. Please try again later.', 'error');
+    } finally {
+        submitButton.disabled = false;
+    }
+    
+    return false;
+}
+
+function showNewsletterMessage(message, type) {
+    const messageElement = document.getElementById('newsletter-message');
+    messageElement.textContent = message;
+    messageElement.style.display = 'block';
+    messageElement.style.color = type === 'error' ? '#dc3545' : '#28a745';
+    
+    // Hide message after 5 seconds
+    setTimeout(() => {
+        messageElement.style.display = 'none';
+    }, 5000);
+}
+
 // Load articles when the page loads
 document.addEventListener('DOMContentLoaded', loadArticles); 

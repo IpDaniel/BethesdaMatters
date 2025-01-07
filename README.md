@@ -13,21 +13,10 @@
         - [x] Get the authors from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
     - [x] Add option to remove co-authors
         - [x] in both the article write and edit pages
-    - [17] Priority setting for the editors
+    - [x] Priority setting for the editors
     - [x] Log in
         - [x] add the credentials: include line to necessary fetch calls on front end 
     - [x] Log out
-
-
-    - [ ] Employee side pages
-        - [ ] manage sidebar widgets
-        - [ ] manage and edit articles
-        - [ ] see my articles
-        - [ ] Newspaper home
-    - [ ] updated the nav bar on the following pages:
-        - [ ] write article
-        - [ ] edit article
-        - [ ] sidebar widget edit
 
 - Consumer side
     - [x] Captions
@@ -39,6 +28,18 @@
         - [x] pagination? / Dynamic loading
         - [x] Dynamic link access from nav bar
         - [x] Make the article links work
+    - [x] Automate weather
+
+- Both
+    - [x] Sports
+    - [x] Traffic alerts
+    - [x] Weekend events
+        - [x] Remember to make login required to edit the sidebar widgets
+    - [23] Newsletter
+    - [x] Change the "news" to "Matters" everywhere it's important
+
+
+- Small upgrades/fixes
     - [18] Make the reading time dynamically calculated and rendered
         - [19] might already be like this for the article search page 
     - [14] Author pages
@@ -47,16 +48,7 @@
     - [20] Properly accredit multiple authors on front end homepage
         - [21] currently it just shows 2 articles
     - [24] Make the metadata format properly
-    - [x] Automate weather
-
-- Both
-    - [x] Sports
-    - [x] Traffic alerts
-    - [x] Weekend events
-        - [x] Remember to make login required to edit the sidebar widgets
     - [22] Make the line spacing work properly even with paragraphs in the same text box for articles specifically
-    - [23] Newsletter
-    - [x] Change the "news" to "Matters" everywhere it's important
 
 
 - Small fixes at the end
