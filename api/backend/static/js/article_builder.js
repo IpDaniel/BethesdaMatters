@@ -81,7 +81,8 @@ function createGenreOptions(genres) {
 document.addEventListener('DOMContentLoaded', function() {
     // Existing authors fetch
     fetch('/writers/author-ids', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(data => {
@@ -91,7 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // New genres fetch
     fetch('/writers/genre-tag-options', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(genres => {
@@ -310,6 +312,7 @@ document.getElementById('articleForm').addEventListener('submit', function(e) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(payload)
     })
     .then(response => response.json())

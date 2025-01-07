@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // First fetch authors, then fetch article data
     fetch('/writers/author-ids', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => {
         console.log('Author response received:', response.status);
@@ -26,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Now fetch article data
         return fetch(`/articles/edit-article/${articleId}`, {
-            method: 'GET'
+            method: 'GET',
+            credentials: 'include'
         });
     })
     .then(response => {
@@ -64,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Fetch and populate genre options
         return fetch('/writers/genre-tag-options', {
-            method: 'GET'
+            method: 'GET',
+            credentials: 'include'
         });
     })
     .then(response => {
@@ -251,6 +254,7 @@ document.getElementById('articleForm').addEventListener('submit', function(e) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(payload)
     })
     .then(response => response.json())

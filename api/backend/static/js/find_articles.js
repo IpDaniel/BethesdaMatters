@@ -57,7 +57,8 @@ function loadMoreArticles() {
     params.append('package', JSON.stringify(package));
 
     fetch(`/articles/metadata/search-order?${params.toString()}`, {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(data => {
@@ -129,7 +130,8 @@ function loadInitialArticles() {
     params.append('package', JSON.stringify(package));
 
     fetch(`/articles/metadata/search-order?${params.toString()}`, {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(data => {
@@ -147,7 +149,8 @@ function loadInitialArticles() {
 
 function loadAuthors() {
     fetch('/writers/author-ids', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(authors => {
@@ -171,7 +174,8 @@ function loadAuthors() {
 // Add this new function to load genres
 function loadGenres() {
     fetch('/articles/all-genres', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
     .then(response => response.json())
     .then(data => {

@@ -5,10 +5,12 @@ from flask import make_response
 from flask import current_app
 from flask import render_template
 from backend.db_connection import db
+from flask_login import login_required
 
 writers = Blueprint('writers', __name__)
 
 @writers.route('/write-article')
+@login_required
 def writers_page():
     return render_template('write_article.html')
 
@@ -51,6 +53,7 @@ def author_ids():
     return jsonify(author_list)
 
 @writers.route('/edit-article/<int:article_id>', methods=['GET'])
+@login_required
 def edit_article(article_id):
     return render_template('edit_article.html', article_id=article_id)
 

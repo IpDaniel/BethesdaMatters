@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 
 from backend.db_connection import db
 from backend.companies.companies_routes import companies
@@ -6,6 +7,9 @@ from backend.navigation.navigation_routes import navigation
 from backend.articles.article import articles
 from backend.writers.writers import writers
 from backend.services.weather import weather
+from backend.auth.routes import auth
+from backend.auth.models import User
+
 import os
 from dotenv import load_dotenv
 
@@ -37,6 +41,25 @@ def create_app():
     app.logger.info('current_app(): starting the database connection')
     db.init_app(app)
 
+    # Initialize Flask-Login
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT * FROM employee_accounts WHERE id = %s', (user_id,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        
+        if user_data:
+            return User(
+                id=user_data['id'],
+                email=user_data['email'],
+                role=user_data['role']
+            )
+        return None
 
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
@@ -46,6 +69,7 @@ def create_app():
     app.register_blueprint(articles,  url_prefix='/articles')
     app.register_blueprint(writers,  url_prefix='/writers')
     app.register_blueprint(weather,  url_prefix='/weather')
+    app.register_blueprint(auth,  url_prefix='/auth')
 
     # Don't forget to return the app object
     return app

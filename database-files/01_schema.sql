@@ -35,6 +35,16 @@ create table authors (
     image_url varchar(255)
 );
 
+create table employee_accounts (
+    id int primary key auto_increment,
+    author_id int unique,  -- one-to-one relationship with authors, nullable
+    email varchar(255) unique not null,
+    password_hash varchar(255) not null,
+    role enum('writer', 'editor', 'admin', 'staff') not null,
+    created_at datetime default current_timestamp,
+    foreign key (author_id) references authors(id)
+);
+
 create table article_authors (
     article_id int,
     author_id int,

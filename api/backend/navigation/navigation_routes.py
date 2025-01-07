@@ -17,3 +17,7 @@ def get_navigation():
 def get_find_articles():
     return render_template('find_articles.html')
 
+@navigation.route('/login', methods=['GET'])
+def get_login():
+    return render_template('login.html')
+

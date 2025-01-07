@@ -11,10 +11,11 @@
     - [x] Edit an article
         - [x] Get genre tags from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
         - [x] Get the authors from the database and make sure they are displayed in the form. also make sure they can get updated like the other fields
-    - [8] Add option to remove co-authors
-        - [ ] in both the article write and edit pages
+    - [x] Add option to remove co-authors
+        - [x] in both the article write and edit pages
     - [17] Priority setting for the editors
     - [9] Log in
+        - [ ] add the credentials: include line to necessary fetch calls on front end 
     - [10] Log out
 
 - Consumer side
@@ -32,7 +33,7 @@
     - [14] Author pages
         - [15] Viewing
         - [16] Editing?
-    - [20] Properly accredit multiple authors on front end
+    - [20] Properly accredit multiple authors on front end homepage
         - [21] currently it just shows 2 articles
     - [24] Make the metadata format properly
     - [x] Automate weather
@@ -52,6 +53,12 @@
     - [ ] Add the blue underline to the titles in the article search page
     - [ ] Make the main image captions not just be the title of the article
 
-8
+Routes I added the loging_required decorator to:
+- /write-article
+- /edit-article/<int:article_id>
+- /write-article
+- /edit-article/<article_id>
+- /logout
+
 13
 17

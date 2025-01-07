@@ -5,6 +5,7 @@ from flask import make_response
 from flask import current_app
 from flask import render_template
 from backend.db_connection import db
+from flask_login import login_required
 from backend.articles.article_helpers import text_content_crop, get_featured_articles
 from datetime import datetime
 import json
@@ -107,6 +108,7 @@ def featured_articles():
     return jsonify(featured_articles_data), 200
 
 @articles.route('/write-article', methods=['POST'])
+@login_required
 def write_article():
     """Inserts a new article into the database
     expecting json with the following structure:
@@ -256,6 +258,7 @@ def write_article():
         }), 500
 
 @articles.route('/edit-article/<article_id>', methods=['GET'])
+@login_required
 def get_article_for_edit(article_id):
     """Get article data for editing"""
     connection = db.get_db()
@@ -332,6 +335,7 @@ def get_article_for_edit(article_id):
     return jsonify(article_data)
 
 @articles.route('/update-article/<article_id>', methods=['PUT'])
+@login_required
 def update_article(article_id):
     """Update an existing article"""
     article_data = request.get_json()

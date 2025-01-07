@@ -1,7 +1,10 @@
 async function loadArticles() {
     try {
         // Fetch articles from your API endpoint
-        const response = await fetch('/articles/featured-articles');
+        const response = await fetch('/articles/featured-articles', {
+            method: 'GET',
+            credentials: 'include'
+        });
         const articles = await response.json();
 
         // Split articles into main, side, and row articles
