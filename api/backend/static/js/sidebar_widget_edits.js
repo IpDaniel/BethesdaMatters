@@ -3,6 +3,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const addWidgetBtn = document.getElementById('add-widget-btn');
     let nextNewId = 100; // Starting ID for new widgets
 
+    // Add this function to load widgets from backend
+    function loadWidgets() {
+        fetch('/sidebar/get-sidebar-widgets')
+            .then(response => response.json())
+            .then(widgets => {
+                widgetList.innerHTML = ''; // Clear existing widgets
+                
+                // Check if widgets array is empty
+                if (!widgets || widgets.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-widgets-message';
+                    emptyMessage.innerHTML = `
+                        <p>No widgets found. Click the "Add New Widget" button below to create one!</p>
+                    `;
+                    widgetList.appendChild(emptyMessage);
+                    return;
+                }
+
+                // If we have widgets, display them
+                widgets.forEach(widget => {
+                    const widgetElement = document.createElement('div');
+                    widgetElement.className = 'widget-card';
+                    widgetElement.dataset.id = widget.id;
+                    
+                    widgetElement.innerHTML = `
+                        <div class="widget-content">
+                            <h3>${widget.title}</h3>
+                            <p>${widget.content}</p>
+                        </div>
+                        <div class="widget-edit-form hidden">
+                            <input type="text" class="widget-title-input" value="${widget.title}">
+                            <textarea class="widget-content-input">${widget.content}</textarea>
+                            <div class="edit-buttons">
+                                <button class="save-btn">Save</button>
+                                <button class="cancel-btn">Cancel</button>
+                            </div>
+                        </div>
+                        <button class="edit-btn">Edit</button>
+                    `;
+                    
+                    widgetList.appendChild(widgetElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading widgets:', error);
+                // Add error message to the UI
+                widgetList.innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading widgets. Please try refreshing the page.</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Call loadWidgets when page loads
+    loadWidgets();
+
     // Handle edit button clicks
     widgetList.addEventListener('click', function(e) {
         if (e.target.classList.contains('edit-btn')) {
@@ -76,8 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const isNew = widgetId >= 100;
         const method = isNew ? 'POST' : 'PUT';
         const url = isNew 
-            ? '/api/sidebar-widgets'
-            : `/api/sidebar-widgets/${widgetId}`;
+            ? '/create-sidebar-widget'
+            : `/update-sidebar-widget/${widgetId}`;
             
         fetch(url, {
             method: method,

@@ -12,27 +12,51 @@ def get_sidebar_widgets_page():
 def get_sidebar_widgets():
     try:
         connection = db.get_db()
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor()
         
-        cursor.execute("""
+        # Add debug logging
+        current_app.logger.info("Attempting to fetch sidebar widgets")
+        
+        query = """
             SELECT id, widget_type, title, content, 
                    updated_at, created_at
             FROM sidebar_widgets
             ORDER BY id
-        """)
+        """
         
-        widgets = cursor.fetchall()
+        cursor.execute(query)
+        results = cursor.fetchall()
         
-        # Convert datetime objects to strings for JSON serialization
-        for widget in widgets:
-            widget['updated_at'] = widget['updated_at'].isoformat()
-            widget['created_at'] = widget['created_at'].isoformat()
+        # If no widgets found, return empty list instead of error
+        if not results:
+            current_app.logger.info("No widgets found, returning empty list")
+            return jsonify([]), 200
+        
+        # Convert results to list of dictionaries
+        widgets = []
+        for row in cursor.fetchall():
+            # Get column names from cursor description
+            columns = [desc[0] for desc in cursor.description]
+            # Create dictionary by zipping column names with row values
+            row_dict = dict(zip(columns, row))
+            
+            widget = {
+                'id': row_dict['id'],
+                'widget_type': row_dict['widget_type'],
+                'title': row_dict['title'],
+                'content': row_dict['content'],
+                'updated_at': row_dict['updated_at'].strftime("%Y-%m-%dT%H:%M:%S") if row_dict['updated_at'] else None,
+                'created_at': row_dict['created_at'].strftime("%Y-%m-%dT%H:%M:%S") if row_dict['created_at'] else None
+            }
+            widgets.append(widget)
         
         cursor.close()
         return jsonify(widgets), 200
         
     except Exception as e:
         current_app.logger.error(f"Error fetching sidebar widgets: {str(e)}")
+        import traceback
+        current_app.logger.error(f"Full traceback: {traceback.format_exc()}")
         return jsonify({'error': 'Internal server error'}), 500
 
 @sidebar.route('/update-sidebar-widget/<int:widget_id>', methods=['PUT'])
