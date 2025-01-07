@@ -602,3 +602,9 @@ def get_next_article_metadata():
 def search_articles():
     """Renders the search articles page"""
     return render_template('find_articles.html')
+
+@articles.route('/manage-articles')
+@login_required
+def manage_articles():
+    """Renders the manage articles page"""
+    return render_template('manage_articles.html')

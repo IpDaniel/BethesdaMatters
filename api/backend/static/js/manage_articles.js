@@ -4,7 +4,7 @@ let hasMoreArticles = true;
 
 function createArticleCard(article) {
     return `
-        <article class="article-card" data-priority-score="${article.priority_score}">
+        <article class="article-card" data-article-id="${article.id}" data-priority-score="${article.priority_score}">
             <img src="${article.cover_image}" alt="Article image" class="article-image">
             <div class="article-info">
                 <h2 class="article-title">${article.title}</h2>
@@ -91,10 +91,64 @@ function loadMoreArticles() {
     });
 }
 
-// Placeholder function for priority movement (to be implemented later)
-function movePriority(articleId, direction) {
-    console.log(`Moving article ${articleId} ${direction}`);
-    // Implementation will be added later
+async function movePriority(articleId, direction) {
+    const articleCard = document.querySelector(`.article-card[data-article-id="${articleId}"]`);
+    if (!articleCard) return;
+
+    const currentPriority = parseFloat(articleCard.dataset.priorityScore);
+    
+    // Find the adjacent article based on direction
+    const allArticles = Array.from(document.querySelectorAll('.article-card'));
+    const currentIndex = allArticles.indexOf(articleCard);
+    
+    const adjacentArticle = direction === 'up' 
+        ? allArticles[currentIndex - 1]  // previous article
+        : allArticles[currentIndex + 1]; // next article
+    
+    if (!adjacentArticle) return; // No article to swap with
+    
+    const adjacentId = parseInt(adjacentArticle.dataset.articleId);
+    const adjacentPriority = parseFloat(adjacentArticle.dataset.priorityScore);
+
+    try {
+        const endpoint = direction === 'up' 
+            ? `/writers/increase-priority/${articleId}`
+            : `/writers/lower-priority/${articleId}`;
+            
+        const response = await fetch(endpoint, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                this_article_priority: currentPriority,
+                [`next_${direction === 'up' ? 'highest' : 'lowest'}_article_id`]: adjacentId,
+                [`next_${direction === 'up' ? 'highest' : 'lowest'}_article_priority`]: adjacentPriority
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to update priority');
+        }
+
+        // Swap the articles in the DOM
+        const parent = articleCard.parentNode;
+        if (direction === 'up') {
+            parent.insertBefore(articleCard, adjacentArticle);
+        } else {
+            parent.insertBefore(adjacentArticle, articleCard);
+        }
+
+        // Update the priority scores in the dataset
+        articleCard.dataset.priorityScore = adjacentPriority;
+        adjacentArticle.dataset.priorityScore = currentPriority;
+
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+        console.error('Error updating priority:', error);
+    }
 }
 
 // Load initial articles when page loads

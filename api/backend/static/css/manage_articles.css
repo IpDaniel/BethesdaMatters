@@ -19,6 +19,7 @@
     border-radius: 8px;
     padding: 1rem;
     align-items: center;
+    transition: transform 0.3s ease;
 }
 
 .article-image {
@@ -99,10 +100,26 @@
 .btn-priority {
     background-color: #f0f0f0;
     color: #333;
+    padding: 0.5rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-priority:hover {
     background-color: #e0e0e0;
+}
+
+.btn-priority:active {
+    background-color: #d0d0d0;
+    transform: scale(0.95);
+}
+
+.btn-priority:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .priority-controls {
