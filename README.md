@@ -15,8 +15,19 @@
         - [x] in both the article write and edit pages
     - [17] Priority setting for the editors
     - [x] Log in
-        - [ ] add the credentials: include line to necessary fetch calls on front end 
+        - [x] add the credentials: include line to necessary fetch calls on front end 
     - [x] Log out
+
+
+    - [ ] Employee side pages
+        - [ ] manage sidebar widgets
+        - [ ] manage and edit articles
+        - [ ] see my articles
+        - [ ] Newspaper home
+    - [ ] updated the nav bar on the following pages:
+        - [ ] write article
+        - [ ] edit article
+        - [ ] sidebar widget edit
 
 - Consumer side
     - [x] Captions
@@ -26,7 +37,7 @@
         - [x] Author tags
         - [x] search algorithm?
         - [x] pagination? / Dynamic loading
-        - [5] Dynamic link access from nav bar
+        - [x] Dynamic link access from nav bar
         - [x] Make the article links work
     - [18] Make the reading time dynamically calculated and rendered
         - [19] might already be like this for the article search page 
@@ -39,16 +50,17 @@
     - [x] Automate weather
 
 - Both
-    - [11] Sports
-    - [12] Traffic alerts
-    - [13] Weekend events
-        - [ ] Remember to make login required to edit the sidebar widgets
+    - [x] Sports
+    - [x] Traffic alerts
+    - [x] Weekend events
+        - [x] Remember to make login required to edit the sidebar widgets
     - [22] Make the line spacing work properly even with paragraphs in the same text box for articles specifically
     - [23] Newsletter
     - [x] Change the "news" to "Matters" everywhere it's important
 
 
 - Small fixes at the end
+    - [ ] add the find articles page to the nav bar
     - [ ] Search bar works for article content as well as title
     - [ ] increase the articles loaded on page load and per pagination load so it doesnt get stuck with no scrollbar
     - [ ] Add the blue underline to the titles in the article search page

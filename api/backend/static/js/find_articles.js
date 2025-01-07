@@ -114,18 +114,21 @@ function debounce(func, wait) {
 function loadInitialArticles() {
     document.querySelector('.articles-list').innerHTML = '<div>Loading...</div>';
     
+    const searchText = document.querySelector('.search-bar').value;
+    const selectedGenres = Array.from(document.querySelectorAll('#genre-checkboxes input:checked')).map(cb => cb.value);
+    const selectedAuthors = Array.from(document.querySelectorAll('#author-checkboxes input:checked')).map(cb => parseInt(cb.value));
+    
     const package = {
         constraints: {
-            genre_matches: [],
-            author_id_matches: [],
-            text_contains: []
+            genre_matches: selectedGenres.length > 0 ? selectedGenres : null,
+            author_id_matches: selectedAuthors.length > 0 ? selectedAuthors : null,
+            text_contains: searchText ? searchText.split(' ').filter(word => word.length > 0) : null
         },
         prior_priority_score: 100,
         number_requested: 2,
         page: 1
     };
 
-    // Convert to URL parameters properly
     const params = new URLSearchParams();
     params.append('package', JSON.stringify(package));
 
@@ -137,9 +140,15 @@ function loadInitialArticles() {
     .then(data => {
         const articlesList = document.querySelector('.articles-list');
         articlesList.innerHTML = '';
-        data.articles.forEach(article => {
-            articlesList.insertAdjacentHTML('beforeend', createArticleCard(article));
-        });
+        if (data.articles && data.articles.length > 0) {
+            data.articles.forEach(article => {
+                articlesList.insertAdjacentHTML('beforeend', createArticleCard(article));
+            });
+            hasMoreArticles = data.has_more;
+        } else {
+            articlesList.innerHTML = '<div class="no-articles">No articles found</div>';
+            hasMoreArticles = false;
+        }
         page++;
     })
     .catch(() => {
@@ -198,40 +207,70 @@ function loadGenres() {
 
 // Modify the DOMContentLoaded event listener to include genre loading
 document.addEventListener('DOMContentLoaded', () => {
-    // Load genres for the checkboxes
-    loadGenres();
-    
-    // Load authors for the select dropdown
-    loadAuthors();
-    
-    // Check for genre parameter in URL
+    // Get URL parameters first
     const genreParam = getUrlParameter('genre');
-    if (genreParam) {
-        // Show the filters
+    const authorParam = getUrlParameter('author');
+
+    // Show filters if we have any parameters
+    if (genreParam || authorParam) {
         const filterControls = document.querySelector('.filter-controls');
         filterControls.style.display = 'block';
         filterControls.classList.add('visible');
-        
-        // Wait for genres to load, then check the appropriate box
-        setTimeout(() => {
-            const genreCheckboxes = document.querySelectorAll('#genre-checkboxes input[type="checkbox"]');
-            genreCheckboxes.forEach(checkbox => {
-                if (checkbox.value === genreParam) {
-                    checkbox.checked = true;
-                    // Trigger a search with this genre
-                    hasMoreArticles = true;
-                    page = 1;
-                    document.querySelector('.articles-list').innerHTML = '';
-                    loadMoreArticles();
-                }
-            });
-        }, 500); // Give time for genres to load
-    } else {
-        // Initialize the page number and load initial articles
-        page = 1;
-        loadInitialArticles();
     }
-    
+
+    // Create a promise-based function to load and set genres
+    const setupGenres = () => {
+        return new Promise((resolve) => {
+            loadGenres();
+            if (genreParam) {
+                setTimeout(() => {
+                    const genreCheckboxes = document.querySelectorAll('#genre-checkboxes input[type="checkbox"]');
+                    genreCheckboxes.forEach(checkbox => {
+                        if (checkbox.value === genreParam) {
+                            checkbox.checked = true;
+                        }
+                    });
+                    resolve();
+                }, 500);
+            } else {
+                resolve();
+            }
+        });
+    };
+
+    // Create a promise-based function to load and set authors
+    const setupAuthors = () => {
+        return new Promise((resolve) => {
+            loadAuthors();
+            if (authorParam) {
+                setTimeout(() => {
+                    const authorCheckboxes = document.querySelectorAll('#author-checkboxes input[type="checkbox"]');
+                    authorCheckboxes.forEach(checkbox => {
+                        if (checkbox.value === authorParam) {
+                            checkbox.checked = true;
+                        }
+                    });
+                    resolve();
+                }, 500);
+            } else {
+                resolve();
+            }
+        });
+    };
+
+    // Wait for both setups to complete before loading articles
+    Promise.all([setupGenres(), setupAuthors()]).then(() => {
+        if (genreParam || authorParam) {
+            hasMoreArticles = true;
+            page = 1;
+            document.querySelector('.articles-list').innerHTML = '';
+            loadMoreArticles();
+        } else {
+            page = 1;
+            loadInitialArticles();
+        }
+    });
+
     // Add manual search button handler
     document.querySelector('.search-button').addEventListener('click', () => {
         hasMoreArticles = true;
@@ -239,30 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.articles-list').innerHTML = '';
         loadMoreArticles();
     });
-    
-    // Existing event listeners that you may want to comment out later
-    // document.querySelector('.search-bar').addEventListener('input', debounce(() => {
-    //     hasMoreArticles = true;
-    //     page = 1;
-    //     document.querySelector('.articles-list').innerHTML = '';
-    //     loadMoreArticles();
-    // }, 300));
-
-    // // Update genre checkbox event listeners
-    // document.querySelector('#genre-checkboxes').addEventListener('change', () => {
-    //     hasMoreArticles = true;
-    //     page = 1;
-    //     document.querySelector('.articles-list').innerHTML = '';
-    //     loadMoreArticles();
-    // });
-
-    // // Update author checkbox event listeners
-    // document.querySelector('#author-checkboxes').addEventListener('change', () => {
-    //     hasMoreArticles = true;
-    //     page = 1;
-    //     document.querySelector('.articles-list').innerHTML = '';
-    //     loadMoreArticles();
-    // });
 
     // Add filter toggle functionality
     const filtersToggle = document.querySelector('.filters-toggle');

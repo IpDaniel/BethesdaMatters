@@ -16,9 +16,12 @@
 
     <nav>
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">My Articles</a></li>
+            <li><a href="/">Newspaper Home</a></li>
+            <li><a href="/articles/search?author={{ current_user.id }}">My Articles</a></li>
+            <li><a href="/writers/write-article">Write Article</a></li>
+            <li><a href="/manage-articles">Manage Articles</a></li>
+            <li><a href="/sidebar/edit-sidebar-widgets">Manage Sidebar</a></li>
+            <li><a href="/auth/logout">Log Out</a></li>
         </ul>
     </nav>
 
