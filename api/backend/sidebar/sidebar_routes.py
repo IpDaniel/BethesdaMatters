@@ -1,6 +1,16 @@
 from flask import Blueprint, jsonify, request, render_template
 from flask import current_app
 from backend.db_connection import db
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Add a stream handler to see logs in console
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+logger.addHandler(handler)
 
 sidebar = Blueprint('sidebar', __name__)
 
@@ -14,9 +24,6 @@ def get_sidebar_widgets():
         connection = db.get_db()
         cursor = connection.cursor()
         
-        # Add debug logging
-        current_app.logger.info("Attempting to fetch sidebar widgets")
-        
         query = """
             SELECT id, widget_type, title, content, 
                    updated_at, created_at
@@ -27,36 +34,38 @@ def get_sidebar_widgets():
         cursor.execute(query)
         results = cursor.fetchall()
         
-        # If no widgets found, return empty list instead of error
+        # Log raw results
+        logger.info("Raw results from database: %s", results)
+        
         if not results:
-            current_app.logger.info("No widgets found, returning empty list")
+            logger.info("No widgets found, returning empty list")
             return jsonify([]), 200
         
-        # Convert results to list of dictionaries
+        # Since we're getting dictionaries, we can just pass them through
+        # with minimal processing for the dates
         widgets = []
-        for row in cursor.fetchall():
-            # Get column names from cursor description
-            columns = [desc[0] for desc in cursor.description]
-            # Create dictionary by zipping column names with row values
-            row_dict = dict(zip(columns, row))
+        for row in results:
+            # Log the raw row for debugging
+            logger.info("Processing raw row: %s", row)
             
-            widget = {
-                'id': row_dict['id'],
-                'widget_type': row_dict['widget_type'],
-                'title': row_dict['title'],
-                'content': row_dict['content'],
-                'updated_at': row_dict['updated_at'].strftime("%Y-%m-%dT%H:%M:%S") if row_dict['updated_at'] else None,
-                'created_at': row_dict['created_at'].strftime("%Y-%m-%dT%H:%M:%S") if row_dict['created_at'] else None
-            }
-            widgets.append(widget)
+            # Just format the dates and pass through the rest
+            row['updated_at'] = row['updated_at'].strftime("%Y-%m-%dT%H:%M:%S") if row['updated_at'] else None
+            row['created_at'] = row['created_at'].strftime("%Y-%m-%dT%H:%M:%S") if row['created_at'] else None
+            widgets.append(row)
+            
+            # Log each processed widget
+            logger.info("Processed widget: %s", row)
         
         cursor.close()
+        
+        # Log final response
+        logger.info("Sending response with %d widgets: %s", len(widgets), widgets)
         return jsonify(widgets), 200
         
     except Exception as e:
-        current_app.logger.error(f"Error fetching sidebar widgets: {str(e)}")
+        logger.error("Error fetching sidebar widgets: %s", str(e))
         import traceback
-        current_app.logger.error(f"Full traceback: {traceback.format_exc()}")
+        logger.error("Full traceback: %s", traceback.format_exc())
         return jsonify({'error': 'Internal server error'}), 500
 
 @sidebar.route('/update-sidebar-widget/<int:widget_id>', methods=['PUT'])
