@@ -123,29 +123,7 @@
                 </div>
             </div>
 
-            <div class="sidebar-item">
-                <div class="sidebar-item-content">
-                    <h4>Traffic Alert</h4>
-                    <p>Road Work on Wisconsin Ave</p>
-                    <p>Expect 15-minute delays between 9AM-3PM</p>
-                </div>
-            </div>
-
-            <div class="sidebar-item">
-                <div class="sidebar-item-content">
-                    <h4>Weekend Events</h4>
-                    <p>Farmers Market & Art Festival</p>
-                    <p>Saturday & Sunday, 10AM-4PM</p>
-                </div>
-            </div>
-
-            <div class="sidebar-item">
-                <div class="sidebar-item-content">
-                    <h4>Local Sports</h4>
-                    <p>Bethesda Bulls: 24 - Ravens: 21</p>
-                    <p>High School Championship this Friday</p>
-                </div>
-            </div>
+            <div id="dynamic-sidebar-widgets"></div>
 
             <h3>Subscribe to Our Newsletter</h3>
             <form>
@@ -207,5 +185,6 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/articles.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}" defer></script>
 </body>
 </html>

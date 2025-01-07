@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, render_template
 from flask import current_app
 from backend.db_connection import db
 import logging
-
+from flask_login import login_required
 # Set up logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -15,6 +15,7 @@ logger.addHandler(handler)
 sidebar = Blueprint('sidebar', __name__)
 
 @sidebar.route('/edit-sidebar-widgets', methods=['GET'])
+@login_required
 def get_sidebar_widgets_page():
     return render_template('sidebar_widget_edit.html')
 
@@ -69,6 +70,7 @@ def get_sidebar_widgets():
         return jsonify({'error': 'Internal server error'}), 500
 
 @sidebar.route('/update-sidebar-widget/<int:widget_id>', methods=['PUT'])
+@login_required
 def update_sidebar_widget(widget_id):
     try:
         widget_data = request.get_json()
@@ -79,13 +81,15 @@ def update_sidebar_widget(widget_id):
         update_query = """
             UPDATE sidebar_widgets 
             SET title = %s,
-                content = %s
+                content = %s,
+                widget_type = %s
             WHERE id = %s
         """
         
         cursor.execute(update_query, (
             widget_data['title'],
             widget_data['content'],
+            widget_data['widget_type'],
             widget_id
         ))
         
@@ -105,6 +109,7 @@ def update_sidebar_widget(widget_id):
         return jsonify({'error': 'Internal server error'}), 500
 
 @sidebar.route('/create-sidebar-widget', methods=['POST'])
+@login_required
 def create_sidebar_widget():
     try:
         widget_data = request.get_json()
@@ -138,4 +143,63 @@ def create_sidebar_widget():
         return jsonify({'error': f'Missing required field: {str(e)}'}), 400
     except Exception as e:
         current_app.logger.error(f"Error creating sidebar widget: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@sidebar.route('/get-widget-types', methods=['GET'])
+def get_widget_types():
+    try:
+        connection = db.get_db()
+        cursor = connection.cursor()
+        
+        # Query to get enum values from the information schema
+        query = """
+            SELECT COLUMN_TYPE
+            FROM information_schema.COLUMNS 
+            WHERE TABLE_SCHEMA = 'bethesda_matters'
+            AND TABLE_NAME = 'sidebar_widgets' 
+            AND COLUMN_NAME = 'widget_type'
+        """
+        
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        
+        if not result:
+            return jsonify({'error': 'Could not fetch widget types'}), 500
+            
+        # Parse the enum string into a list
+        # Input looks like: "enum('traffic','events','sports')"
+        enum_str = result['COLUMN_TYPE']
+        # Remove "enum(" from start and ")" from end
+        enum_str = enum_str[5:-1]
+        # Split by comma and clean up quotes
+        widget_types = [t.strip("'") for t in enum_str.split(',')]
+        
+        return jsonify(widget_types), 200
+        
+    except Exception as e:
+        logger.error("Error fetching widget types: %s", str(e), exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+@sidebar.route('/delete-sidebar-widget/<int:widget_id>', methods=['DELETE'])
+@login_required
+def delete_sidebar_widget(widget_id):
+    try:
+        connection = db.get_db()
+        cursor = connection.cursor()
+        
+        delete_query = "DELETE FROM sidebar_widgets WHERE id = %s"
+        cursor.execute(delete_query, (widget_id,))
+        
+        connection.commit()
+        
+        if cursor.rowcount == 0:
+            cursor.close()
+            return jsonify({'error': 'Widget not found'}), 404
+            
+        cursor.close()
+        return jsonify({'message': 'Widget deleted successfully'}), 200
+        
+    except Exception as e:
+        logger.error("Error deleting sidebar widget: %s", str(e), exc_info=True)
         return jsonify({'error': 'Internal server error'}), 500
