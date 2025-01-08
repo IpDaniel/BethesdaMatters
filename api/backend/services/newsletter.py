@@ -45,7 +45,6 @@ def add_email():
             cursor.close()
 
 @newsletter.route('/get-newsletter-recipients', methods=['GET'])
-@login_required
 def get_recipients():
     connection = db.get_db()
     cursor = connection.cursor()

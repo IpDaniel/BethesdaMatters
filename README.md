@@ -1,5 +1,38 @@
 # Bethesda News App
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Todo
 
 - Producer side
@@ -35,7 +68,7 @@
     - [x] Traffic alerts
     - [x] Weekend events
         - [x] Remember to make login required to edit the sidebar widgets
-    - [23] Newsletter
+    - [x] Newsletter
     - [x] Change the "news" to "Matters" everywhere it's important
 
 
@@ -49,9 +82,6 @@
         - [21] currently it just shows 2 articles
     - [24] Make the metadata format properly
     - [22] Make the line spacing work properly even with paragraphs in the same text box for articles specifically
-
-
-- Small fixes at the end
     - [ ] add the find articles page to the nav bar
     - [ ] Search bar works for article content as well as title
     - [ ] increase the articles loaded on page load and per pagination load so it doesnt get stuck with no scrollbar
@@ -59,12 +89,41 @@
     - [ ] Make the main image captions not just be the title of the article
     - [ ] Stick a logout button on there somewhere
 
-Routes I added the login_required decorator to:
-- /write-article
-- /edit-article/<int:article_id>
-- /write-article
-- /edit-article/<article_id>
-- /logout
 
-13
-17
+Things to demo
+
+- [ ] Tech Stack
+    - [ ] mySQL
+    - [ ] Flask
+    - [ ] Jinja2
+    - [ ] HTML
+    - [ ] CSS
+    - [ ] JavaScript
+    - [ ] Docker
+- [ ] Home page
+    - [ ] Articles and priorities
+    - [ ] Sidebar (brief)
+    - [ ] Nav bar
+    - [ ] Weather app
+    - [ ] Newsletter
+- [ ] Find articles page
+    - [ ] Pagination
+    - [ ] Author filters
+    - [ ] Genre filters
+    - [ ] Search bar
+    - [ ] Nav bar functionality
+- Employee Side
+    - [ ] Login and logout
+        - [ ] remember me
+        - [ ] route decorator
+    - [ ] Add article
+        - [ ] homepage link
+        - [ ] my articles page
+    - [ ] Write article
+        - [ ] Give example
+    - [ ] Manage articles
+        - [ ] view article
+        - [ ] move up and down
+    - [ ] Edit article
+    - [ ] Add article
+
